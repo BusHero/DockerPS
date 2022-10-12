@@ -1,3 +1,9 @@
 function Get-DockerImages {
-	docker images --format '{{json .}}' | ConvertFrom-Json
+	param (
+		[string]
+		$image
+	)
+	return docker images `
+		$image `
+		--format '{{json .}}' | ConvertFrom-Json
 }
