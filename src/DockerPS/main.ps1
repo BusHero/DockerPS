@@ -1,9 +1,15 @@
-function Get-DockerImages {
+function Format-DockerArguments {
 	param (
 		[string]
-		$image
+		$Image
 	)
-	return docker images `
-		$image `
-		--format '{{json .}}' | ConvertFrom-Json
+	$arguments = @()
+
+	$arguments += 'images'
+	$arguments += '--format'
+	$arguments += "'{{json .}}'"
+	$arguments += $Image
+	
+	$arguments = $arguments | Where-Object { $_ }
+	return [string]::Join(' ', $arguments)
 }
