@@ -1,7 +1,10 @@
 function Format-DockerArguments {
 	param (
 		[string]
-		$Image
+		$Image,
+
+		[switch]
+		$NoTrunk
 	)
 	$arguments = @()
 
@@ -9,7 +12,10 @@ function Format-DockerArguments {
 	$arguments += '--format'
 	$arguments += "'{{json .}}'"
 	$arguments += $Image
-	
+	if ($NoTrunk) {
+		$arguments += '--no-trunc'
+	}
+
 	$arguments = $arguments | Where-Object { $_ }
 	return [string]::Join(' ', $arguments)
 }

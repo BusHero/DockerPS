@@ -11,6 +11,10 @@ Describe 'Format-DockerArguments' {
 		$imageName = 'foo'
 		Format-DockerArguments -Image $imageName | Should -Be "images --format '{{json .}}' $imageName" 
 	}
+
+	It '--no-trunk' {
+		Format-DockerArguments -NoTrunk | Should -Be "images --format '{{json .}}' --no-trunc" 
+	}
 }
 
 AfterAll {
