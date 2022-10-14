@@ -4,7 +4,10 @@ function Format-DockerArguments {
 		$Image,
 
 		[switch]
-		$NoTrunk
+		$NoTrunk,
+
+		[string[]]
+		$Filter
 	)
 	$arguments = @()
 
@@ -14,6 +17,10 @@ function Format-DockerArguments {
 	$arguments += $Image
 	if ($NoTrunk) {
 		$arguments += '--no-trunc'
+	}
+	foreach ($f in $filter | Where-Object { $_ }) {
+		$arguments += '--filter'
+		$arguments += "'${f}'"
 	}
 
 	$arguments = $arguments | Where-Object { $_ }
