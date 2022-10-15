@@ -82,5 +82,5 @@ function Get-DockerImages {
 		$Filter
 	)
 	$arguments = (Format-DockerArguments -Image $Image -NoTrunk:$NoTrunk -Filter $Filter)
-	return docker $arguments
+	return docker $arguments | ConvertFrom-Json
 }
