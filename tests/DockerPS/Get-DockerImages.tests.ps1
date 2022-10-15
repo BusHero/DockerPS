@@ -63,7 +63,7 @@ Describe 'Get-DockerImages' {
 				Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
 					"$args" -eq "images --format '{{json .}}' --filter '${filter1}'"
 				}
-			}		
+			}
 		}
 
 		Describe 'Filter as dictionary' {
