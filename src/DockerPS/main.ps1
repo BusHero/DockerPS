@@ -1,4 +1,5 @@
 function Format-DockerArguments {
+	[CmdletBinding(PositionalBinding = $false)]
 	param (
 		[string]
 		$Image,
@@ -6,7 +7,6 @@ function Format-DockerArguments {
 		[switch]
 		$NoTrunk,
 
-		[string[]]
 		$Filter
 	)
 	$arguments = @()
@@ -18,9 +18,25 @@ function Format-DockerArguments {
 	if ($NoTrunk) {
 		$arguments += '--no-trunc'
 	}
-	foreach ($f in $filter | Where-Object { $_ }) {
-		$arguments += '--filter'
-		$arguments += "'${f}'"
+	if ($Filter -is [string]) {
+		if ($Filter) {
+			$arguments += '--filter'
+			$arguments += "'${Filter}'"
+		}
+	}
+	elseif ($Filter -is [array]) {
+		foreach ($f in $Filter | Where-Object { $_ }) {
+			$arguments += '--filter'
+			$arguments += "'${f}'"
+		}
+	}
+	elseif ($Filter -is [hashtable] -or $Filter -is [System.Collections.Specialized.OrderedDictionary]) {
+		foreach ($key in $Filter.Keys) {
+			if ($Filter.$key) {
+				$arguments += '--filter'
+				$arguments += "'${Key}=$($Filter.$Key)'"
+			}
+		}
 	}
 
 	$arguments = $arguments | Where-Object { $_ }

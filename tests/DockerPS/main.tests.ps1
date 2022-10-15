@@ -43,6 +43,39 @@ Describe 'Format-DockerArguments' {
 				Should -Be "images --format '{{json .}}' --filter '${filter1}'" 
 			}
 		}
+		
+		Describe 'Filter as dictionary' {
+			It 'One filter' {
+				$filter = @{
+					foo = 'Bar'
+				}
+				Format-DockerArguments -Filter $filter |
+				Should -Be "images --format '{{json .}}' --filter 'foo=$($filter.foo)'"
+			}
+			Describe 'Hashtable' {
+				BeforeAll {
+					$filter = @{
+						foo = 'bar'
+						bar = 'baz'
+					}
+					$result = Format-DockerArguments -Filter $filter
+				}
+				It 'foo' {
+					$result | Should -Match "--filter 'foo=$($filter.foo)'"
+				}
+				It 'bar' {
+					$result | Should -Match "--filter 'bar=$($filter.bar)'"
+				}
+			}
+			It 'Two filter ordered' {
+				$filter = [ordered]@{
+					foo = 'Bar'
+					bar = 'Baz'
+				}
+				Format-DockerArguments -Filter $filter |
+				Should -Be "images --format '{{json .}}' --filter 'foo=$($filter.foo)' --filter 'bar=$($filter.bar)'"
+			}
+		}
 	}
 }
 
