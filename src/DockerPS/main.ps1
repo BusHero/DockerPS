@@ -46,7 +46,6 @@ function ConvertFilterToDockerArguments {
 }
 
 function Format-DockerArguments {
-	[CmdletBinding(PositionalBinding = $false)]
 	param (
 		[string]
 		$Image,
@@ -70,4 +69,18 @@ function Format-DockerArguments {
 
 	$arguments = $arguments | Where-Object { $_ }
 	return [string]::Join(' ', $arguments)
+}
+
+function Get-DockerImages {
+	param (
+		[string]
+		$Image,
+
+		[switch]
+		$NoTrunk,
+
+		$Filter
+	)
+	$arguments = (Format-DockerArguments -Image $Image -NoTrunk:$NoTrunk -Filter $Filter)
+	return docker $arguments
 }
