@@ -52,8 +52,30 @@ Describe 'Check project' {
 			$ImportedModule.ExportedCommands.Keys | Should -Contain $FunctionName
 		}
 	
-		It '<FunctionName> command should exist' {
-			Get-Command $FunctionName | Should -Not -Be $null
+		Describe 'Foo' {
+			BeforeAll {
+				$command = Get-Command $FunctionName -ErrorAction Ignore
+			}
+
+			It '<FunctionName> command should exist' {
+				$command | Should -Not -Be $null
+			}
+
+			It '<FunctionName>.HelpUri' {
+				$command.HelpUri | Should -Not -Be $null
+			}
+
+			It '<FunctionName>.HelpUri should be reachable' {
+				{ Invoke-WebRequest $command.HelpUri } | Should -Not -Throw
+			}
+		}
+
+		It 'Help' {
+			Get-Help $FunctionName | Should -Not -BeNullOrEmpty
+		}
+
+		It '<FunctionName> should support -?' {
+			& $FunctionName -? | Should -Not -BeNullOrEmpty
 		}
 	}
 

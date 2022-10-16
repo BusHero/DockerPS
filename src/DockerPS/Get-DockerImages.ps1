@@ -72,6 +72,7 @@ function Format-DockerArguments {
 }
 
 function Get-DockerImages {
+	[CmdletBinding(HelpUri = 'https://github.com/BusHero/DockerPS')]
 	param (
 		[string]
 		$Image,
