@@ -72,7 +72,7 @@ function Format-DockerArguments {
 }
 
 function Get-DockerImages {
-	[CmdletBinding(HelpUri = 'https://github.com/BusHero/DockerPS/blob/main/docs/Get-DockerImages.md')]
+	[CmdletBinding(HelpUri = 'https://github.com/BusHero/DockerPS/wiki/Get-DockerImages')]
 	param (
 		[string]
 		$Image,
