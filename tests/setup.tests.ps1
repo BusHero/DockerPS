@@ -56,6 +56,10 @@ Describe 'Check project' {
 			Get-Command $FunctionName | Should -Not -Be $null
 		}
 	}
+
+	It 'Tags' {
+		$ImportedModule.Tags | Should -Contain 'docker'
+	}
 }
 
 

@@ -8,6 +8,7 @@ New-ModuleManifest `
 	-ProjectUri $constants.Repository `
 	-LicenseUri $constants.LicenseUri `
 	-RootModule "$($constants.ProjectName).psm1" `
+	-Tags 'docker' `
 	-FunctionsToExport 'Get-DockerImages'
 
 return $manifestPath
