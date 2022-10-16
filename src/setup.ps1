@@ -4,6 +4,9 @@ $manifestPath = "${PSScriptRoot}\$($constants.ProjectName)\$($constants.ProjectN
 New-ModuleManifest `
 	-Guid $constants.ProjectGUID `
 	-Path $manifestPath `
+	-Author $constants.Author `
+	-ProjectUri $constants.Repository `
+	-LicenseUri $constants.LicenseUri `
 	-RootModule "$($constants.ProjectName).psm1" `
 	-FunctionsToExport 'Get-DockerImages'
 
