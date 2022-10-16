@@ -5,12 +5,20 @@ BeforeAll {
 	$ImportedModule = Get-Module $constants.ProjectName
 }
 
-Describe 'Functions' {
-	It 'Get-DockerImages' {
-		$ImportedModule.ExportedCommands.Keys | Should -Contain 'Get-DockerImages'
+Describe 'Functions' -ForEach @(
+	@{ FunctionName = 'Get-DockerImages' }
+) {
+	It '<FunctionName> should be exported' {
+		$ImportedModule.ExportedCommands.Keys | Should -Contain $FunctionName
+	}
+
+	It '<FunctionName> command should exist' {
+		Get-Command $FunctionName | Should -Not -Be $null
 	}
 }
 
-AfterAll {
-
+AfterAll {	
+	Remove-Module `
+		-Name $ImportedModule `
+		-ErrorAction Ignore
 }
