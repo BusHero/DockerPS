@@ -22,7 +22,7 @@ BeforeAll {
 		pwsh -File "${TargetPath}\src\$($item.Name)"
 }
 
-Describe 'Dependencies are installed' {
+Describe 'Dependencies are installed' -Tag 'docker' {
 	It 'Dependencies are installed' {
 		Write-Host 'Invoke dependencies.Tests.ps1 ...'
 		docker exec `

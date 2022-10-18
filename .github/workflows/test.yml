@@ -7,3 +7,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Print Hello World
         run: Write-Host 'Hello, World!'
+      - name: install dependencies
+        run: .\src\Install-Dependencies.ps1
+      - name: run tests
+        run: .\run-tests.ps1
