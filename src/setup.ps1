@@ -1,5 +1,3 @@
-Import-Module Pester
-
 $constants = & "${PSScriptRoot}\..\constants.ps1"
 $manifestPath = "${PSScriptRoot}\$($constants.ProjectName)\$($constants.ProjectName).psd1"
 
