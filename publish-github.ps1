@@ -4,7 +4,7 @@ $PackagesDirectory = "${PSScriptRoot}\packages"
 Write-Host 'Create .\packages'
 New-Item `
 	-Path $PackagesDirectory `
-	-ItemType Directory
+	-ItemType Directory > $null
 
 Write-Host 'Register local PSRepository'
 Register-PSRepository `
@@ -17,3 +17,5 @@ Write-Host 'Publish module'
 Publish-Module `
 	-Path '.\src\DockerPS' `
 	-Repository $PSRepository
+
+

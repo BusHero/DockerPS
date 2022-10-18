@@ -1,5 +1,8 @@
 name: Build
 on: pull_request
+env:
+  GITHUB_FEED: https://nuget.pkg.github.com/BusHero/index.json
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   build:
     runs-on: windows-latest
@@ -13,3 +16,5 @@ jobs:
       #   run: .\run-tests.ps1
       - name: publish module
         run: .\publish-github.ps1
+      - name: publish to github
+        run: dotnet nuget push .\packages\* --source $GITHUB_FEED --skip-duplicate --api-key $GITHUB_TOKEN
