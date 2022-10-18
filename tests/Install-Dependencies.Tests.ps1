@@ -1,9 +1,10 @@
 BeforeAll {
 	$item = Get-ScriptPath -Path $PSCommandPath | Get-Item
 	$Container = 'test'
-	$SourcePath = $item.Directory
-	$TargetPath = 'C:\scripts'
+	$SourcePath = "${PSScriptRoot}\.."
+	$TargetPath = 'C:\DockerPS'
 	
+	Write-Host 'Create test container ...'
 	docker run `
 		--name $container `
 		--mount "type=bind,source=${SourcePath},target=${TargetPath}" `
@@ -12,21 +13,21 @@ BeforeAll {
 		--rm `
 		mcr.microsoft.com/powershell
 	
+	Write-Host 'Install dependencies in container ...'
 	docker exec `
 		$Container `
-		pwsh -File "${TargetPath}\$($item.Name)"
+		pwsh -File "${TargetPath}\src\$($item.Name)"
 }
 
-Describe 'Check dependencies are installed' -ForEach @(
-	@{ ModuleName = 'Pester'; Version = '5.3.3' }
-	@{ ModuleName = 'PesterExtensions'; Version = '0.7.4' }
-) {
-
-	It '<ModuleName> should have <Version>' {
-		$ActualVersion = docker exec `
+Describe 'Dependencies are installed' {
+	It 'Dependencies are installed' {
+		Write-Host 'Invoke dependencies.Tests.ps1 ...'
+		docker exec `
+			-t `
+			-i `
 			$Container `
-			pwsh -c "Get-InstalledModule ${ModuleName} | Select -ExpandProperty Version"
-		$ActualVersion | Should -Be $Version
+			pwsh -Command "Invoke-Pester -ExitCode ${TargetPath}\tests\dependencies.Tests.ps1"
+		$LASTEXITCODE | Should -Be 0
 	}
 }
 
