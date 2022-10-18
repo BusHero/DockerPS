@@ -8,13 +8,16 @@ BeforeAll {
 	docker run `
 		--name $container `
 		--mount "type=bind,source=${SourcePath},target=${TargetPath}" `
-		-it `
-		-d `
+		--interactive `
+		--detach `
+		--tty `
 		--rm `
 		mcr.microsoft.com/powershell
 	
 	Write-Host 'Install dependencies in container ...'
 	docker exec `
+		--tty `
+		--interactive `
 		$Container `
 		pwsh -File "${TargetPath}\src\$($item.Name)"
 }
@@ -23,10 +26,10 @@ Describe 'Dependencies are installed' {
 	It 'Dependencies are installed' {
 		Write-Host 'Invoke dependencies.Tests.ps1 ...'
 		docker exec `
-			-t `
-			-i `
+			--tty `
+			--interactive `
 			$Container `
-			pwsh -Command "Invoke-Pester -ExitCode ${TargetPath}\tests\dependencies.Tests.ps1"
+			pwsh -Command "Invoke-Pester -EnableExit ${TargetPath}\tests\dependencies.Tests.ps1"
 		$LASTEXITCODE | Should -Be 0
 	}
 }
