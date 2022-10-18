@@ -1,6 +1,7 @@
 name: Build
 on: pull_request
 env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   GITHUB_FEED: https://nuget.pkg.github.com/BusHero/index.json
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
