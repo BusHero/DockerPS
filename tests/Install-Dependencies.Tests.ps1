@@ -19,8 +19,8 @@ BeforeAll {
 		pwsh -File "${TargetPath}\src\$($item.Name)"
 }
 
-Describe 'asdo' {
-	It 'asd' {
+Describe 'Dependencies are installed' {
+	It 'Dependencies are installed' {
 		Write-Host 'Invoke dependencies.Tests.ps1 ...'
 		docker exec `
 			-t `
