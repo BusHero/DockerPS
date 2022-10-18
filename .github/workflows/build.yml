@@ -5,9 +5,11 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
-      - name: install dependencies
-        run: .\src\Install-Dependencies.ps1
-      - name: setup project
-        run: .\src\setup.ps1
-      - name: run tests
-        run: .\run-tests.ps1
+      # - name: install dependencies
+      #   run: .\src\Install-Dependencies.ps1
+      # - name: setup project
+      #   run: .\src\setup.ps1
+      # - name: run tests
+      #   run: .\run-tests.ps1
+      - name: publish module
+        run: .\publish-github.ps1
