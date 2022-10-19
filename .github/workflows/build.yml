@@ -4,9 +4,9 @@ env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   GITHUB_FEED: https://nuget.pkg.github.com/BusHero/index.json
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   build:
+    
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
@@ -17,4 +17,5 @@ jobs:
       # - name: run tests
       #   run: .\run-tests.ps1
       - name: publish module
-        run: .\publish-github.ps1 -ApiKey ${{ secrets.POM }}
+        shell: pwsh
+        run: .\publish-github.ps1 -ApiKey ${{ secrets.GITHUB_TOKEN }}
