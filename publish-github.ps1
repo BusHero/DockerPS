@@ -1,10 +1,17 @@
-$PSRepository = 'LocalPSRepo'
+param (
+	[Parameter(Mandatory)]
+	[string]
+	$ApiKey
+)
+
+$PSRepository = "LocalPSRepo_$(New-Guid)"
 $PackagesDirectory = "${PSScriptRoot}\packages"
 
 Write-Host 'Create .\packages'
 New-Item `
 	-Path $PackagesDirectory `
-	-ItemType Directory > $null
+	-ItemType Directory `
+	-Force > $null
 
 Write-Host 'Register local PSRepository'
 Register-PSRepository `
@@ -16,6 +23,44 @@ Register-PSRepository `
 Write-Host 'Publish module'
 Publish-Module `
 	-Path '.\src\DockerPS' `
-	-Repository $PSRepository
+	-Repository $PSRepository `
+	-ErrorAction Ignore
 
+Unregister-PSRepository `
+	-Name $PSRepository `
+	-ErrorAction Ignore
 
+New-Item `
+	-Path '.\packages\DockerPS' `
+	-ItemType Directory `
+	-ErrorAction Ignore `
+	-Force > $null
+
+Expand-Archive `
+	-Path .\packages\DockerPS.0.0.1.nupkg `
+	-OutputPath '.\packages\DockerPS'
+
+Remove-Item -Path .\packages\DockerPS.0.0.1.nupkg
+
+$doc = New-Object System.Xml.XmlDocument
+$doc.Load('C:\Users\Petru\projects\powershell\DockerPS\packages\DockerPS\DockerPS.nuspec')
+$repository = $doc.CreateElement('repository', $doc.package.NamespaceURI)
+$typeAttribute = $doc.CreateAttribute('type')
+$typeAttribute.Value = 'git'
+$repository.Attributes.Append($typeAttribute)
+
+$urlAttribute = $doc.CreateAttribute('url')
+$urlAttribute.Value = $doc.package.metadata.projectUrl
+$repository.Attributes.Append($urlAttribute)
+$doc.package.metadata.AppendChild($repository)
+$doc.Save('C:\Users\Petru\projects\powershell\DockerPS\packages\DockerPS\DockerPS.nuspec')
+
+nuget pack `
+	.\packages\DockerPS `
+	-OutputDirectory .\packages
+
+dotnet nuget push `
+	.\packages\DockerPS.0.0.1.nupkg `
+	--source 'https://nuget.pkg.github.com/BusHero/index.json' `
+	--skip-duplicate `
+	--api-key $ApiKey
