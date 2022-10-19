@@ -17,4 +17,4 @@ jobs:
       # - name: run tests
       #   run: .\run-tests.ps1
       - name: publish module
-        run: .\publish-github.ps1 -ApiKey $GITHUB_TOKEN
+        run: .\publish-github.ps1 -ApiKey ${{ secrets.POM }}
