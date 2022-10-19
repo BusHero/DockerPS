@@ -17,6 +17,4 @@ jobs:
       # - name: run tests
       #   run: .\run-tests.ps1
       - name: publish module
-        run: .\publish-github.ps1
-      - name: publish to github
-        run: dotnet nuget push .\packages\* --source https://nuget.pkg.github.com/BusHero/DockerPS/index.json --skip-duplicate --api-key ${{ secrets.POM }}
+        run: .\publish-github.ps1 -ApiKey $GITHUB_TOKEN
