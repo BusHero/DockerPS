@@ -3,6 +3,7 @@ param (
 	[string]
 	$ApiKey
 )
+Import-Module Microsoft.PowerShell.Archive
 
 $PSRepository = "LocalPSRepo_$(New-Guid)"
 $PackagesDirectory = "${PSScriptRoot}\packages"
@@ -38,7 +39,7 @@ New-Item `
 
 Expand-Archive `
 	-Path .\packages\DockerPS.0.0.1.nupkg `
-	-OutputPath "${PackagesDirectory}\DockerPS"
+	-DestinationPath "${PackagesDirectory}\DockerPS"
 
 Remove-Item -Path "${PackagesDirectory}\DockerPS.0.0.1.nupkg"
 
