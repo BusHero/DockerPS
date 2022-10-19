@@ -38,12 +38,12 @@ New-Item `
 
 Expand-Archive `
 	-Path .\packages\DockerPS.0.0.1.nupkg `
-	-OutputPath '.\packages\DockerPS'
+	-OutputPath "${PackagesDirectory}\DockerPS"
 
-Remove-Item -Path .\packages\DockerPS.0.0.1.nupkg
+Remove-Item -Path "${PackagesDirectory}\DockerPS.0.0.1.nupkg"
 
 $doc = New-Object System.Xml.XmlDocument
-$doc.Load('C:\Users\Petru\projects\powershell\DockerPS\packages\DockerPS\DockerPS.nuspec')
+$doc.Load("${PackagesDirectory}\DockerPS\DockerPS.nuspec")
 $repository = $doc.CreateElement('repository', $doc.package.NamespaceURI)
 $typeAttribute = $doc.CreateAttribute('type')
 $typeAttribute.Value = 'git'
@@ -53,11 +53,11 @@ $urlAttribute = $doc.CreateAttribute('url')
 $urlAttribute.Value = $doc.package.metadata.projectUrl
 $repository.Attributes.Append($urlAttribute)
 $doc.package.metadata.AppendChild($repository)
-$doc.Save('C:\Users\Petru\projects\powershell\DockerPS\packages\DockerPS\DockerPS.nuspec')
+$doc.Save("${PackagesDirectory}\DockerPS\DockerPS.nuspec")
 
 nuget pack `
-	.\packages\DockerPS `
-	-OutputDirectory .\packages
+	"${PackagesDirectory}\DockerPS" `
+	-OutputDirectory "${PackagesDirectory}"
 
 dotnet nuget push `
 	.\packages\DockerPS.0.0.1.nupkg `
