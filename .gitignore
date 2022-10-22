@@ -2,3 +2,6 @@
 *.dll
 %LOCALAPPDATA%//
 *.psd1
+.nuke/
+bin/
+obj/
