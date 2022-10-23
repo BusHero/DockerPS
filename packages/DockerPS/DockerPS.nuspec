@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>DockerPS</id>
+    <version>0.0.1</version>
+    <authors>Petru Cervac</authors>
+    <owners>Unknown</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://github.com/BusHero/DockerPS/blob/main/license</licenseUrl>
+    <projectUrl>https://github.com/BusHero/DockerPS</projectUrl>
+    <description>Some description here and there</description>
+    <releaseNotes>
+    </releaseNotes>
+    <copyright>(c) Petru Cervac. All rights reserved.</copyright>
+    <tags>docker PSModule PSIncludes_Function PSFunction_Get-DockerImages PSCommand_Get-DockerImages</tags>
+    <repository type="git" url="https://github.com/BusHero/DockerPS" />
+  </metadata>
+</package>
