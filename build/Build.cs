@@ -21,7 +21,11 @@ class Build : NukeBuild
 			.SetFile(RunnersPath / "dependencies.runner.ps1")));
 
 	private Target RunUnitTests => _ => _
-		.DependsOn(InstallDependencies)
+		// .DependsOn(InstallDependencies)
 		.Executes(() => PowerShellCore(_ => _
 			.SetFile(RunnersPath / "unit-tests.runner.ps1")));
+
+	private Target GenerateModuleManifest => _ => _
+		.Executes(() => PowerShellCore(_ => _
+			.SetFile(SrcPath / "setup.ps1")));
 }
