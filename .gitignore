@@ -5,3 +5,4 @@
 .nuke/
 bin/
 obj/
+tools/
