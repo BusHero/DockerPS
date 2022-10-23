@@ -5,11 +5,18 @@ using static PowerShellCoreTasks;
 
 class Build : NukeBuild
 {
-	readonly AbsolutePath InstallDependenciesScript = RootDirectory / "src" / "Install-Dependencies.ps1";
+	private AbsolutePath SrcPath => RootDirectory / "src";
+	private AbsolutePath RunnersPath => RootDirectory / "runners";
 
 	public static int Main() => Execute<Build>(x => x.InstallDependencies);
 
 	private Target InstallDependencies => _ => _
 		.Executes(() => PowerShellCore(_ => _
-			.SetFile(InstallDependenciesScript)));
+			.SetFile(SrcPath / "Install-Dependencies.ps1")));
+
+	private Target TestInstallDependencies => _ => _
+		.TriggeredBy(InstallDependencies)
+		.Unlisted()
+		.Executes(() => PowerShellCore(_ => _
+			.SetFile(RunnersPath / "dependencies.runner.ps1")));
 }
