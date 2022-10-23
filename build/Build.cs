@@ -1,7 +1,7 @@
 using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.Tools.PowerShell;
-using static Nuke.Common.Tools.PowerShell.PowerShellTasks;
+using static PowerShellCoreTasks;
 
 class Build : NukeBuild
 {
@@ -10,7 +10,6 @@ class Build : NukeBuild
 	public static int Main() => Execute<Build>(x => x.InstallDependencies);
 
 	private Target InstallDependencies => _ => _
-		.Executes(() => PowerShell(_ => _
-			.Configure()
+		.Executes(() => PowerShellCore(_ => _
 			.SetFile(InstallDependenciesScript)));
 }
