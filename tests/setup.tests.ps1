@@ -1,35 +1,6 @@
 BeforeAll {
 	$constants = & "${PSScriptRoot}\..\constants.ps1"
-	Get-ScriptPath -Path $PSCommandPath
-	
-	$PSRepository = "LocalPSRepo_$(New-Guid)"
-	$PackagesDirectory = "${TestDrive}\packages"
-	
-	New-Item `
-		-Path $PackagesDirectory `
-		-ItemType Directory `
-		-Force
-		
-	Register-PSRepository `
-		-Name $PSRepository `
-		-SourceLocation $PackagesDirectory `
-		-ScriptSourceLocation $PackagesDirectory `
-		-InstallationPolicy Trusted
-		
-	Publish-Module `
-		-Path "${PSScriptRoot}\..\src\$($constants.ProjectName)" `
-		-Repository $PSRepository
-	
-	Install-Module `
-		-Name $constants.ProjectName `
-		-Repository $PSRepository `
-		-Scope CurrentUser `
-		-SkipPublisherCheck `
-		-Force
-	Import-Module `
-		-Name $constants.ProjectName `
-		-Scope Local
-	$ImportedModule = Get-Module $constants.ProjectName
+	$ImportedModule = Test-ModuleManifest -Path 'C:\Users\Petru\projects\powershell\DockerPS\src\DockerPS\DockerPS.psd1'
 }
 	
 Describe 'Check project' {
@@ -84,49 +55,9 @@ Describe 'Check project' {
 		It '<FunctionName> should be exported' {
 			$ImportedModule.ExportedCommands.Keys | Should -Contain $FunctionName
 		}
-	
-		Describe 'Foo' {
-			BeforeAll {
-				$command = Get-Command $FunctionName -ErrorAction Ignore
-			}
-
-			It '<FunctionName> command should exist' {
-				$command | Should -Not -Be $null
-			}
-
-			It '<FunctionName>.HelpUri' {
-				$command.HelpUri | Should -Not -Be $null
-			}
-
-			It '<FunctionName>.HelpUri should be reachable' {
-				{ Invoke-WebRequest $command.HelpUri } | Should -Not -Throw
-			}
-		}
-
-		It 'Help' {
-			Get-Help $FunctionName | Should -Not -BeNullOrEmpty
-		}
-
-		It '<FunctionName> should support -?' {
-			& $FunctionName -? | Should -Not -BeNullOrEmpty
-		}
 	}
 
 	It 'Tags' {
 		$ImportedModule.Tags | Should -Contain 'docker'
 	}
-}
-
-AfterAll {
-	Remove-Module `
-		-Name $ImportedModule `
-		-ErrorAction Ignore
-
-	Uninstall-Module `
-		-Name DockerPS `
-		-ErrorAction Ignore
-
-	Unregister-PSRepository `
-		-Name $PSRepository `
-		-ErrorAction Ignore
 }

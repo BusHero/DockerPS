@@ -28,4 +28,9 @@ class Build : NukeBuild
 	private Target GenerateModuleManifest => _ => _
 		.Executes(() => PowerShellCore(_ => _
 			.SetFile(SrcPath / "setup.ps1")));
+
+	private Target TestModuleManifest => _ => _
+		.TriggeredBy(GenerateModuleManifest)
+		.Executes(() => PowerShellCore(_ => _
+			.SetFile(RunnersPath / "test-modulemanifest.runner.ps1")));
 }
