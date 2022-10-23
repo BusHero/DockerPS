@@ -6,14 +6,14 @@ using Nuke.Common.Tooling;
 
 class Build : NukeBuild
 {
-	readonly AbsolutePath Foo = RootDirectory / "Foo.ps1";
+	readonly AbsolutePath InstallDependenciesScript = RootDirectory / "src" / "Install-Dependencies.ps1";
 
-	public static int Main() => Execute<Build>(x => x.First);
+	public static int Main() => Execute<Build>(x => x.InstallDependencies);
 
-	private Target First => _ => _
+	private Target InstallDependencies => _ => _
 		.Executes(() => PowerShell(_ => _
 			.SetProcessToolPath("pwsh")
 			.SetNoProfile(true)
 			.SetNoLogo(true)
-			.SetFile(Foo)));
+			.SetFile(InstallDependenciesScript)));
 }
