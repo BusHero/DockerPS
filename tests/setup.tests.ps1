@@ -1,9 +1,10 @@
-BeforeAll {
-	$constants = & "${PSScriptRoot}\..\constants.ps1"
-	$ImportedModule = Test-ModuleManifest -Path 'C:\Users\Petru\projects\powershell\DockerPS\src\DockerPS\DockerPS.psd1'
-}
-	
 Describe 'Check project' {
+	BeforeAll {
+		$constants = & "${PSScriptRoot}\..\constants.ps1"
+		Import-Module -Name 'C:\Users\Petru\projects\powershell\DockerPS\src\DockerPS'
+		$ImportedModule = Get-Module -Name $constants.ProjectName
+	}
+
 	It 'Project GUID' {
 		$ImportedModule.Guid | Should -Be $constants.ProjectGUID
 	}
@@ -55,9 +56,36 @@ Describe 'Check project' {
 		It '<FunctionName> should be exported' {
 			$ImportedModule.ExportedCommands.Keys | Should -Contain $FunctionName
 		}
+		Describe 'Check <FunctionName>' {
+			BeforeAll {
+				$command = Get-Command `
+					$FunctionName `
+					-Module DockerPS `
+					-ErrorAction Ignore
+			}
+			It '<FunctionName> command should exist' {
+				$command | Should -Not -Be $null
+			}
+			It '<FunctionName>.HelpUri' {
+				$command.HelpUri | Should -Not -Be $null
+			}
+			It '<FunctionName>.HelpUri should be reachable' {
+				{ Invoke-WebRequest $command.HelpUri } | Should -Not -Throw
+			}
+			It 'Help' {
+				Get-Help $FunctionName | Should -Not -BeNullOrEmpty
+			}
+			It '<FunctionName> should support -?' {
+				& $FunctionName -? | Should -Not -BeNullOrEmpty
+			}
+		}
 	}
 
 	It 'Tags' {
 		$ImportedModule.Tags | Should -Contain 'docker'
+	}
+
+	AfterAll {
+		Remove-Module -Name DockerPS
 	}
 }
