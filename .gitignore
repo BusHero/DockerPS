@@ -2,3 +2,9 @@
 *.dll
 %LOCALAPPDATA%//
 *.psd1
+.nuke/
+bin/
+obj/
+tools/
+.vscode/
+test-results/

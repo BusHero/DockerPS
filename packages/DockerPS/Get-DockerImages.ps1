@@ -46,7 +46,6 @@ function ConvertFilterToDockerArguments {
 }
 
 function Format-DockerArguments {
-	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Demo')]
 	param (
 		[string]
 		$Image,
@@ -73,7 +72,6 @@ function Format-DockerArguments {
 }
 
 function Get-DockerImages {
-	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Demo')]
 	[CmdletBinding(HelpUri = 'https://github.com/BusHero/DockerPS/wiki/Get-DockerImages')]
 	param (
 		[string]
