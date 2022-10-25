@@ -1,5 +1,8 @@
 name: A test workflow
 on: pull_request
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
 jobs:
   build:
     runs-on: windows-latest
