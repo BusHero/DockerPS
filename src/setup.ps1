@@ -1,3 +1,14 @@
+param(
+	[Parameter(Mandatory)]
+	[version]
+	$Version,
+
+	[Parameter(Mandatory = $false)]
+	[string]
+	$Prerelease
+
+)
+
 $constants = & "${PSScriptRoot}\..\constants.ps1"
 $manifestPath = "${PSScriptRoot}\$($constants.ProjectName)\$($constants.ProjectName).psd1"
 
@@ -9,5 +20,7 @@ New-ModuleManifest `
 	-ProjectUri $constants.Repository `
 	-LicenseUri $constants.LicenseUri `
 	-RootModule "$($constants.ProjectName).psm1" `
+	-ModuleVersion $version `
+	-Prerelease $Prerelease `
 	-Tags 'docker' `
 	-FunctionsToExport 'Get-DockerImages'

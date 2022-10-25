@@ -4,9 +4,14 @@ using Nuke.Common.Tools.PowerShell;
 using static PowerShellCoreTasks;
 using static Nuke.Common.Tools.NuGet.NuGetTasks;
 using Nuke.Common.Tools.NuGet;
+using Nuke.Common.Tools.GitVersion;
+using Nuke.Common.Git;
 
 class Build : NukeBuild
 {
+	[GitRepository]
+	readonly GitRepository Repository;
+
 	private AbsolutePath SrcPath => RootDirectory / "src";
 	private AbsolutePath RunnersPath => RootDirectory / "runners";
 
@@ -33,8 +38,18 @@ class Build : NukeBuild
 			.SetFile(RunnersPath / "script-analyzer.runner.ps1")));
 
 	private Target GenerateModuleManifest => _ => _
-		.Executes(() => PowerShellCore(_ => _
-			.SetFile(SrcPath / "setup.ps1")));
+		.Executes(() =>
+		{
+			var segments = Repository.Branch.Split("/");
+			string prerelease = segments.Length == 1
+				? segments[0]
+				: segments.Last();
+
+			return PowerShellCore(_ => _
+				.SetFile(SrcPath / "setup.ps1")
+				.AddFileArguments("-Version", $"{DateTime.Now:yyyyMMdd}.{DateTime.Now:HHmmss}.0")
+				.AddFileArguments("-Prerelease", prerelease));
+		});
 
 	private Target TestModuleManifest => _ => _
 		.TriggeredBy(GenerateModuleManifest)
