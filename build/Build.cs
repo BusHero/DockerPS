@@ -30,12 +30,10 @@ class Build : NukeBuild
 			.SetFile(RunnersPath / "dependencies.runner.ps1")));
 
 	private Target RunUnitTests => _ => _
-		.DependsOn(InstallDependencies)
 		.Executes(() => PowerShellCore(_ => _
 			.SetFile(RunnersPath / "unit-tests.runner.ps1")));
 
 	private Target InvokePSAnalyzer => _ => _
-		.DependsOn(InstallDependencies)
 		.Executes(() => PowerShellCore(_ => _
 			.SetFile(RunnersPath / "script-analyzer.runner.ps1")));
 
@@ -59,7 +57,6 @@ class Build : NukeBuild
 			.SetFile(RunnersPath / "test-modulemanifest.runner.ps1")));
 
 	private Target GenerateNuspec => _ => _
-		.DependsOn(GenerateModuleManifest)
 		.Executes(() => PowerShellCore(_ => _
 			.SetFile(RunnersPath / "nuspec.ps1")
 			.AddFileArguments(

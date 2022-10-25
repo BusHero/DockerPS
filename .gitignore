@@ -1,8 +1,8 @@
 *.zip
 *.dll
-%LOCALAPPDATA%//
+%LOCALAPPDATA%/
 *.psd1
-.nuke/
+.nuke/temp/
 bin/
 obj/
 tools/

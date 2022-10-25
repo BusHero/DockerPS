@@ -1,7 +1,7 @@
 Describe 'Check project' {
 	BeforeAll {
 		$constants = & "${PSScriptRoot}\..\constants.ps1"
-		Import-Module -Name 'C:\Users\Petru\projects\powershell\DockerPS\src\DockerPS'
+		Import-Module -Name "${PSScriptRoot}\..\src\DockerPS"
 		$ImportedModule = Get-Module -Name $constants.ProjectName
 	}
 

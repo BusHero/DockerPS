@@ -1,0 +1,22 @@
+name: Generate Nuget Package
+on: pull_request
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: ./build.ps1 --target Install-Dependencies
+      - name: Run unit tests
+        run: ./build.ps1 --target Run-Unit-Tests
+      - name: Invoke PSScriptAnalyzer
+        run: ./build.ps1 --target InvokePSAnalyzer
+      - name: Generate Module Manifest
+        run: ./build.ps1 --target Generate-Module-Manifest
+      - name: Pack
+        run: ./build.ps1 --target Pack 
+      - name: Publish to Github
+        run: ./build.ps1 --target Publish --NugetApiKey ${{ secrets.GITHUB_TOKEN }}
