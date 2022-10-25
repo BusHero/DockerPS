@@ -5,5 +5,5 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Print Hello World
-        run: Write-Host 'Hello, World!'
+      - name: Install Dependencies
+        run: ./build.ps1 --target Install-Dependencies
