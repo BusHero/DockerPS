@@ -10,3 +10,11 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install Dependencies
         run: ./build.ps1 --target Install-Dependencies
+      - name: Run unit tests
+        run: ./build.ps1 --target Run-Unit-Tests
+      - name: Invoke PSScriptAnalyzer
+        run: ./build.ps1 --target InvokePSAnalyzer
+      - name: Generate Module Manifest
+        run: ./build.ps1 --target Generate-Module-Manifest
+      - name: Pack
+        run: ./build.ps1 --target Pack 
