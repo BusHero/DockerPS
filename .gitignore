@@ -2,7 +2,7 @@
 *.dll
 %LOCALAPPDATA%/
 *.psd1
-.nuke/
+.nuke/temp/
 bin/
 obj/
 tools/
