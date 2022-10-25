@@ -18,3 +18,5 @@ jobs:
         run: ./build.ps1 --target Generate-Module-Manifest
       - name: Pack
         run: ./build.ps1 --target Pack 
+      - name: Publish to Github
+        run: ./build.ps1 --target Publish --NugetApiKey ${{ secrets.GITHUB_TOKEN }}
