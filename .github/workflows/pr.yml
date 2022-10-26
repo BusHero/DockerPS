@@ -14,7 +14,7 @@ jobs:
           path: |
             .nuke/temp
             ~/.nuget/packages
-          key: ${{ runner.os }}-${{ hashFiles('global.json', 'source/**/*.csproj') }}
+          key: ${{ runner.os }}
       - name: Install Dependencies
         run: ./build.ps1 --target Install-Dependencies
       - name: Run unit tests
