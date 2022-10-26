@@ -4,7 +4,7 @@ BeforeAll {
 
 Describe 'Get-DockerContainers' {
 	BeforeAll {
-		Mock docker { Write-Warning "$args" }
+		Mock docker { }
 	}
 
 	It 'No parameters' {
