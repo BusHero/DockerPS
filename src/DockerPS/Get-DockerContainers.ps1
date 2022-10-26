@@ -70,6 +70,7 @@ function Format-DockerArguments {
 }
 
 function Get-DockerContainers {
+	[CmdletBinding(HelpUri = 'https://github.com/BusHero/DockerPS/wiki/Get-DockerContainers')]
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Demo')]
 	param (
 		[string]
