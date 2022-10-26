@@ -2,7 +2,10 @@ function Format-DockerArguments {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Demo')]
 	param (
 		[string]
-		$containerName
+		$containerName,
+
+		[switch]
+		$NoTrunc
 	)
 	$arguments = @()
 
@@ -11,6 +14,9 @@ function Format-DockerArguments {
 	$arguments += '--format'
 	$arguments += "'{{json .}}'"
 	$arguments += $containerName
+	if ($NoTrunc) {
+		$arguments += '--no-trunc'
+	}
 	$arguments = $arguments | Where-Object { $_ }
 	return [string]::Join(' ', $arguments)
 }
@@ -19,8 +25,13 @@ function Get-DockerContainers {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Demo')]
 	param (
 		[string]
-		$containerName
+		$containerName,
+
+		[switch]
+		$NoTrunc
 	)
-	$arguments = (Format-DockerArguments -containerName $containerName)
+	$arguments = (Format-DockerArguments `
+			-containerName $containerName `
+			-NoTrunc:$NoTrunc)
 	return docker $arguments | ConvertTo-Json
 }

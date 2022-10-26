@@ -21,4 +21,11 @@ Describe 'Get-DockerContainers' {
 			"$args" -eq "container ls --format '{{json .}}' ${containerName}"
 		}
 	}
+
+	It '--no-trunc' {
+		Get-DockerContainers -NoTrunc
+		Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
+			"$args" -eq "container ls --format '{{json .}}' --no-trunc"
+		}
+	}
 }
