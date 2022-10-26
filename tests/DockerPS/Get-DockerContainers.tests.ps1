@@ -103,4 +103,17 @@ Describe 'Get-DockerContainers' {
 			}
 		}
 	}
+
+	Context 'Get-DockerImages returns an object' {
+		BeforeAll {
+			Mock docker { '{"foo": "bar", "bar": "baz"}' }
+			$result = Get-DockerContainers
+		}
+		It 'Contains foo property' {
+			$result.foo | Should -Be 'bar'
+		}
+		It 'Contains bar property' {
+			$result.bar | Should -Be 'baz'
+		}
+	}
 }

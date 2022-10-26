@@ -84,5 +84,5 @@ function Get-DockerContainers {
 			-containerName $containerName `
 			-NoTrunc:$NoTrunc `
 			-Filter $Filter)
-	return docker $arguments | ConvertTo-Json
+	return docker $arguments | ConvertFrom-Json
 }
