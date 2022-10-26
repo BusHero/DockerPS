@@ -52,7 +52,7 @@ function Format-DockerArguments {
 		$Image,
 
 		[switch]
-		$NoTrunk,
+		$NoTrunc,
 
 		$Filter
 	)
@@ -62,7 +62,7 @@ function Format-DockerArguments {
 	$arguments += '--format'
 	$arguments += "'{{json .}}'"
 	$arguments += $Image
-	if ($NoTrunk) {
+	if ($NoTrunc) {
 		$arguments += '--no-trunc'
 	}
 
@@ -80,10 +80,10 @@ function Get-DockerImages {
 		$Image,
 
 		[switch]
-		$NoTrunk,
+		$NoTrunc,
 
 		$Filter
 	)
-	$arguments = (Format-DockerArguments -Image $Image -NoTrunk:$NoTrunk -Filter $Filter)
+	$arguments = (Format-DockerArguments -Image $Image -NoTrunc:$NoTrunc -Filter $Filter)
 	return docker $arguments | ConvertFrom-Json
 }

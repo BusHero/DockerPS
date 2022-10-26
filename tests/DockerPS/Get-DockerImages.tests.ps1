@@ -22,8 +22,8 @@ Describe 'Get-DockerImages' {
 		}
 	}
 
-	It '--no-trunk' {
-		Get-DockerImages -NoTrunk
+	It '--no-trunc' {
+		Get-DockerImages -NoTrunc
 		Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
 			"${args}" -eq "images --format '{{json .}}' --no-trunc"
 		}
