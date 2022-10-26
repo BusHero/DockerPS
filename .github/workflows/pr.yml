@@ -17,6 +17,10 @@ jobs:
       - name: Generate Module Manifest
         run: ./build.ps1 --target Generate-Module-Manifest
       - name: Pack
-        run: ./build.ps1 --target Pack 
+        run: ./build.ps1 --target Pack
       - name: Publish to Github
         run: ./build.ps1 --target Publish --NugetApiKey ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/upload-artifact@v1
+        with:
+          name: test-results
+          path: ./test-results
