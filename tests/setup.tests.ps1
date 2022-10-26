@@ -52,6 +52,7 @@ Describe 'Check project' {
 
 	Describe 'Exported Functions' -ForEach @(
 		@{ FunctionName = 'Get-DockerImages' }
+		@{ FunctionName = 'Get-DockerContainers' }
 	) {
 		It '<FunctionName> should be exported' {
 			$ImportedModule.ExportedCommands.Keys | Should -Contain $FunctionName

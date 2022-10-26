@@ -23,4 +23,4 @@ New-ModuleManifest `
 	-ModuleVersion $version `
 	-Prerelease $Prerelease `
 	-Tags 'docker' `
-	-FunctionsToExport 'Get-DockerImages'
+	-FunctionsToExport 'Get-DockerImages', 'Get-DockerContainers'

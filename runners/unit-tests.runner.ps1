@@ -15,7 +15,7 @@ $configuration.TestResult.OutputPath = `
 
 # Code Coverage
 $configuration.CodeCoverage.Enabled = $true
-$configuration.CodeCoverage.Path = "${ProjectRoot}\src\DockerPS\Get-DockerImages.ps1"
+$configuration.CodeCoverage.Path = "${ProjectRoot}\src\DockerPS\"
 $configuration.CodeCoverage.OutputPath = "${ProjectRoot}\test-results\coverage.${date}.xml"
 
 Invoke-Pester -Configuration $configuration
