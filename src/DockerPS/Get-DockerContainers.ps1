@@ -1,4 +1,4 @@
-function ConvertStringFilterToArguments {
+function ConvertStringFilterToArguments1 {
 	param (
 		$Filter
 	)
@@ -8,7 +8,7 @@ function ConvertStringFilterToArguments {
 	}
 }
 
-function ConvertArrayToArguments {
+function ConvertArrayToArguments1 {
 	param (
 		$Filter
 	)
@@ -18,7 +18,7 @@ function ConvertArrayToArguments {
 	}
 }
 
-function ConvertHashtableToArguments {
+function ConvertHashtableToArguments1 {
 	param (
 		$Filter
 	)
@@ -30,22 +30,22 @@ function ConvertHashtableToArguments {
 	}
 }
 
-function ConvertFilterToDockerArguments {
+function ConvertFilterToDockerArguments1 {
 	param (
 		$Filter
 	)
 	if ($Filter -is [string]) {
-		return ConvertStringFilterToArguments $Filter
+		return ConvertStringFilterToArguments1 $Filter
 	}
 	elseif ($Filter -is [array]) {
-		return ConvertArrayToArguments $Filter
+		return ConvertArrayToArguments1 $Filter
 	}
 	elseif ($Filter -is [hashtable] -or $Filter -is [System.Collections.Specialized.OrderedDictionary]) {
-		return ConvertHashtableToArguments $Filter
+		return ConvertHashtableToArguments1 $Filter
 	}
 }
 
-function Format-DockerArguments {
+function Format-DockerArguments1 {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Demo')]
 	param (
 		[string]
@@ -64,7 +64,7 @@ function Format-DockerArguments {
 	if ($NoTrunc) {
 		$arguments += '--no-trunc'
 	}
-	$arguments += (ConvertFilterToDockerArguments $Filter)
+	$arguments += (ConvertFilterToDockerArguments1 $Filter)
 	$arguments = $arguments | Where-Object { $_ }
 	return [string]::Join(' ', $arguments)
 }
@@ -81,7 +81,7 @@ function Get-DockerContainers {
 
 		$Filter
 	)
-	$arguments = (Format-DockerArguments `
+	$arguments = (Format-DockerArguments1 `
 			-containerName $containerName `
 			-NoTrunc:$NoTrunc `
 			-Filter $Filter)

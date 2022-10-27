@@ -1,15 +1,11 @@
-BeforeAll {
-	. (Get-ScriptPath -Path $PSCommandPath)
-}
-
 Describe 'Get-DockerContainers' {
 	BeforeAll {
-		Mock docker { }
+		Mock -ModuleName DockerPS docker { }
 	}
 
 	It 'No parameters' {
 		Get-DockerContainers
-		Should -Invoke -CommandName 'docker' -Exactly -Times 1 -ParameterFilter {
+		Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Exactly -Times 1 -ParameterFilter {
 			"$args" -eq "container ls --format '{{json .}}'"
 		}
 	}
@@ -17,14 +13,14 @@ Describe 'Get-DockerContainers' {
 	It 'Specify container name' {
 		$containerName = 'foo'
 		Get-DockerContainers -containerName $containerName
-		Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
+		Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
 			"$args" -eq "container ls --format '{{json .}}' ${containerName}"
 		}
 	}
 
 	It '--no-trunc' {
 		Get-DockerContainers -NoTrunc
-		Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
+		Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
 			"$args" -eq "container ls --format '{{json .}}' --no-trunc"
 		}
 	}
@@ -33,7 +29,7 @@ Describe 'Get-DockerContainers' {
 		It 'one filter' {
 			$filter = 'foo=bar'
 			Get-DockerContainers -Filter $filter 
-			Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
+			Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
 				"$args" -eq "container ls --format '{{json .}}' --filter '${filter}'"
 			}
 		}
@@ -42,7 +38,7 @@ Describe 'Get-DockerContainers' {
 			$filter1 = 'foo=bar'
 			$filter2 = 'bar=baz'
 			Get-DockerContainers -Filter $filter1, $filter2
-			Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
+			Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
 				"$args" -eq "container ls --format '{{json .}}' --filter '${filter1}' --filter '${filter2}'"
 			}
 		}
@@ -51,7 +47,7 @@ Describe 'Get-DockerContainers' {
 			It 'One filter' {
 				$filter = ''
 				Get-DockerContainers -Filter $filter
-				Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
+				Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
 					"$args" -eq "container ls --format '{{json .}}'"
 				}
 			}
@@ -60,7 +56,7 @@ Describe 'Get-DockerContainers' {
 				$filter1 = 'foo=bar'
 				$filter2 = ''
 				Get-DockerContainers -Filter $filter1, $filter2
-				Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
+				Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
 					"$args" -eq "container ls --format '{{json .}}' --filter '${filter1}'"
 				}
 			}
@@ -71,7 +67,7 @@ Describe 'Get-DockerContainers' {
 					foo = 'Bar'
 				}
 				Get-DockerContainers -Filter $filter
-				Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
+				Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
 					"$args" -eq "container ls --format '{{json .}}' --filter 'foo=$($filter.foo)'"
 				}
 			}
@@ -82,7 +78,7 @@ Describe 'Get-DockerContainers' {
 					bar = 'baz'
 				}
 				Get-DockerContainers -Filter $filter
-				Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
+				Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
 					switch ("${args}") {
 						"container ls --format '{{json .}}' --filter 'foo=$($filter.foo)' --filter 'bar=$($filter.bar)'" { return $true }
 						"container ls --format '{{json .}}' --filter 'bar=$($filter.bar)' --filter 'foo=$($filter.foo)'" { return $true }
@@ -97,7 +93,7 @@ Describe 'Get-DockerContainers' {
 					bar = 'Baz'
 				}
 				Get-DockerContainers -Filter $filter
-				Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
+				Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
 					"$args' -eq 'container ls --format '{{json .}}' --filter 'foo=$($filter.foo)' --filter 'bar=$($filter.bar)'"
 				}
 			}
@@ -106,7 +102,7 @@ Describe 'Get-DockerContainers' {
 
 	Context 'Get-DockerImages returns an object' {
 		BeforeAll {
-			Mock docker { '{"foo": "bar", "bar": "baz"}' }
+			Mock -ModuleName DockerPS docker { '{"foo": "bar", "bar": "baz"}' }
 			$result = Get-DockerContainers
 		}
 		It 'Contains foo property' {

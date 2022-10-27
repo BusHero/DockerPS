@@ -1,15 +1,11 @@
-BeforeAll {
-	. (Get-ScriptPath -Path $PSCommandPath)
-}
-
 Describe 'Get-DockerImages' {
 	BeforeAll {
-		Mock docker {  }
+		Mock -ModuleName DockerPS docker { Write-Debug "$args" }
 	}
 	
 	It 'No parameters' {
 		Get-DockerImages
-		Should -Invoke -CommandName 'docker' -Exactly -Times 1 -ParameterFilter {
+		Should -Invoke -CommandName docker -ModuleName DockerPS -Times 1 -ParameterFilter {
 			"${args}" -eq "images --format '{{json .}}'"
 		}
 	}
@@ -17,14 +13,14 @@ Describe 'Get-DockerImages' {
 	It 'Specify image name' {
 		$imageName = 'foo'
 		Get-DockerImages -Image $imageName
-		Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
+		Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
 			"${args}" -eq "images --format '{{json .}}' ${imageName}" 
 		}
 	}
 
 	It '--no-trunc' {
 		Get-DockerImages -NoTrunc
-		Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
+		Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
 			"${args}" -eq "images --format '{{json .}}' --no-trunc"
 		}
 	}
@@ -33,7 +29,7 @@ Describe 'Get-DockerImages' {
 		It 'one filter' {
 			$filter = 'foo=bar'
 			Get-DockerImages -Filter $filter 
-			Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
+			Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
 				"${args}" -eq "images --format '{{json .}}' --filter '${filter}'"
 			}
 		}
@@ -42,7 +38,7 @@ Describe 'Get-DockerImages' {
 			$filter1 = 'foo=bar'
 			$filter2 = 'bar=baz'
 			Get-DockerImages -Filter $filter1, $filter2
-			Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
+			Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
 				"${args}" -eq "images --format '{{json .}}' --filter '${filter1}' --filter '${filter2}'"
 			}
 		}
@@ -51,7 +47,7 @@ Describe 'Get-DockerImages' {
 			It 'One filter' {
 				$filter = ''
 				Get-DockerImages -Filter $filter
-				Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
+				Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
 					"${args}" -eq "images --format '{{json .}}'"
 				}
 			}
@@ -60,7 +56,7 @@ Describe 'Get-DockerImages' {
 				$filter1 = 'foo=bar'
 				$filter2 = ''
 				Get-DockerImages -Filter $filter1, $filter2
-				Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
+				Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
 					"${args}" -eq "images --format '{{json .}}' --filter '${filter1}'"
 				}
 			}
@@ -72,7 +68,7 @@ Describe 'Get-DockerImages' {
 					foo = 'Bar'
 				}
 				Get-DockerImages -Filter $filter
-				Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
+				Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
 					"${args}" -eq "images --format '{{json .}}' --filter 'foo=$($filter.foo)'"
 				}
 			}
@@ -83,7 +79,7 @@ Describe 'Get-DockerImages' {
 					bar = 'baz'
 				}
 				Get-DockerImages -Filter $filter
-				Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
+				Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
 					switch ("${args}") {
 						"images --format '{{json .}}' --filter 'foo=$($filter.foo)' --filter 'bar=$($filter.bar)'" { 
 							return $true
@@ -104,7 +100,7 @@ Describe 'Get-DockerImages' {
 					bar = 'Baz'
 				}
 				Get-DockerImages -Filter $filter
-				Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
+				Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
 					"${args}" -eq "images --format '{{json .}}' --filter 'foo=$($filter.foo)' --filter 'bar=$($filter.bar)'"
 				}
 			}
@@ -113,7 +109,7 @@ Describe 'Get-DockerImages' {
 
 	Describe 'Get-DockerImages returns an object' {
 		BeforeAll {
-			Mock docker { '{"foo": "bar", "bar": "baz"}' }
+			Mock -ModuleName DockerPS docker { '{"foo": "bar", "bar": "baz"}' }
 			$result = Get-DockerImages
 		}
 		It 'Contains foo property' {
@@ -124,3 +120,4 @@ Describe 'Get-DockerImages' {
 		}
 	}
 }
+
