@@ -17,7 +17,7 @@ class Build : NukeBuild
 	private AbsolutePath SrcPath => RootDirectory / "src";
 	private AbsolutePath RunnersPath => RootDirectory / "runners";
 
-	public static int Main() => Execute<Build>(x => x.InstallDependencies);
+	public static int Main() => Execute<Build>(x => x.GenerateModule);
 
 	private Target InstallDependencies => _ => _
 		.Executes(() => PowerShellCore(_ => _
@@ -84,4 +84,15 @@ class Build : NukeBuild
 			.SetTargetPath(RootDirectory / "packages" / "*.nupkg")
 			.SetSource(NugetApiUrl)
 			.SetApiKey(NugetApiKey)));
+
+	private Target RemoveModuleFolder => _ => _
+		.Executes(() => PowerShellCore(_ => _
+			.SetCommand($"Remove-Item -Path {SrcPath / "DockerPS"} -Recurse -ErrorAction Ignore")
+			));
+
+	private Target GenerateModule => _ => _
+		.Triggers(RunUnitTests)
+		.DependsOn(RemoveModuleFolder)
+		.Executes(() => PowerShellCore(_ => _
+			.SetFile(RunnersPath / "generate-module.runner.ps1")));
 }

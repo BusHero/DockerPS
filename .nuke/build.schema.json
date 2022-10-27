@@ -71,12 +71,14 @@
           "items": {
             "type": "string",
             "enum": [
+              "GenerateModule",
               "GenerateModuleManifest",
               "GenerateNuspec",
               "InstallDependencies",
               "InvokePSAnalyzer",
               "Pack",
               "Publish",
+              "RemoveModuleFolder",
               "RunUnitTests",
               "TestInstallDependencies",
               "TestModuleManifest"
@@ -89,12 +91,14 @@
           "items": {
             "type": "string",
             "enum": [
+              "GenerateModule",
               "GenerateModuleManifest",
               "GenerateNuspec",
               "InstallDependencies",
               "InvokePSAnalyzer",
               "Pack",
               "Publish",
+              "RemoveModuleFolder",
               "RunUnitTests",
               "TestInstallDependencies",
               "TestModuleManifest"
