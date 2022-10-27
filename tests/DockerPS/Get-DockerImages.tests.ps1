@@ -10,13 +10,17 @@ Describe 'Get-DockerImages' {
 		}
 	}
 
-	# It 'Specify image name' {
-	# 	$imageName = 'foo'
-	# 	Get-DockerImages -Image $imageName
-	# 	Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
-	# 		"${args}" -eq "images --format '{{json .}}' ${imageName}" 
-	# 	}
-	# }
+	It 'Specify image name' {
+		$imageName = 'foo'
+		Get-DockerImages -Image $imageName
+		Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
+			$expected = "images --format {{json .}} ${imageName}"
+			$actual = "$($args[0])"
+			Write-Warning "Expected: '$expected'"
+			Write-Warning "Actual:   '$actual'"
+			$actual -eq $expected
+		}
+	}
 
 	It '--no-trunc' {
 		Get-DockerImages -NoTrunc
@@ -30,7 +34,7 @@ Describe 'Get-DockerImages' {
 	# 		$filter = 'foo=bar'
 	# 		Get-DockerImages -Filter $filter 
 	# 		Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
-	# 			"${args}" -eq "images --format '{{json .}}' --filter '${filter}'"
+	# 			"${args}" -eq "images --format {{json .}} --filter '${filter}'"
 	# 		}
 	# 	}
 
@@ -39,7 +43,7 @@ Describe 'Get-DockerImages' {
 	# 		$filter2 = 'bar=baz'
 	# 		Get-DockerImages -Filter $filter1, $filter2
 	# 		Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
-	# 			"${args}" -eq "images --format '{{json .}}' --filter '${filter1}' --filter '${filter2}'"
+	# 			"${args}" -eq "images --format {{json .}} --filter '${filter1}' --filter '${filter2}'"
 	# 		}
 	# 	}
 
@@ -48,7 +52,7 @@ Describe 'Get-DockerImages' {
 	# 			$filter = ''
 	# 			Get-DockerImages -Filter $filter
 	# 			Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
-	# 				"${args}" -eq "images --format '{{json .}}'"
+	# 				"${args}" -eq "images --format {{json .}}"
 	# 			}
 	# 		}
 			
@@ -57,7 +61,7 @@ Describe 'Get-DockerImages' {
 	# 			$filter2 = ''
 	# 			Get-DockerImages -Filter $filter1, $filter2
 	# 			Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
-	# 				"${args}" -eq "images --format '{{json .}}' --filter '${filter1}'"
+	# 				"${args}" -eq "images --format {{json .}} --filter '${filter1}'"
 	# 			}
 	# 		}
 	# 	}
@@ -69,7 +73,7 @@ Describe 'Get-DockerImages' {
 	# 			}
 	# 			Get-DockerImages -Filter $filter
 	# 			Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
-	# 				"${args}" -eq "images --format '{{json .}}' --filter 'foo=$($filter.foo)'"
+	# 				"${args}" -eq "images --format {{json .}} --filter 'foo=$($filter.foo)'"
 	# 			}
 	# 		}
 
@@ -81,10 +85,10 @@ Describe 'Get-DockerImages' {
 	# 			Get-DockerImages -Filter $filter
 	# 			Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
 	# 				switch ("${args}") {
-	# 					"images --format '{{json .}}' --filter 'foo=$($filter.foo)' --filter 'bar=$($filter.bar)'" { 
+	# 					"images --format {{json .}} --filter 'foo=$($filter.foo)' --filter 'bar=$($filter.bar)'" { 
 	# 						return $true
 	# 					}
-	# 					"images --format '{{json .}}' --filter 'bar=$($filter.bar)' --filter 'foo=$($filter.foo)'" {
+	# 					"images --format {{json .}} --filter 'bar=$($filter.bar)' --filter 'foo=$($filter.foo)'" {
 	# 						return $true
 	# 					}
 	# 					Default {
@@ -101,7 +105,7 @@ Describe 'Get-DockerImages' {
 	# 			}
 	# 			Get-DockerImages -Filter $filter
 	# 			Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
-	# 				"${args}" -eq "images --format '{{json .}}' --filter 'foo=$($filter.foo)' --filter 'bar=$($filter.bar)'"
+	# 				"${args}" -eq "images --format {{json .}} --filter 'foo=$($filter.foo)' --filter 'bar=$($filter.bar)'"
 	# 			}
 	# 		}
 	# 	}

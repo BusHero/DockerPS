@@ -24,6 +24,16 @@
 						"Default"
 					],
 					"Mandatory": false
+				},
+				{
+					"OriginalName": "",
+					"ValueFromPipelineByPropertyName": true,
+					"Name": "Image",
+					"ParameterType": "string",
+					"ParameterSetName": [
+						"Default"
+					],
+					"Mandatory": false
 				}
 			],
 			"Description": "Gets docker images",
