@@ -1,0 +1,18 @@
+[
+  {
+    "Name": "Microsoft.PowerShell.Crescendo",
+    "Version": "1.0.0"
+  },
+  {
+    "Name": "Pester",
+    "Version": "5.3.3"
+  },
+  {
+    "Name": "PesterExtensions",
+    "Version": "0.7.4"
+  },
+  {
+    "Name": "PSScriptAnalyzer",
+    "Version": "1.21.0"
+  }
+]

@@ -2,9 +2,14 @@ Import-Module Pester
 
 $ProjectRoot = "${PSScriptRoot}\.."
 
+[Pester.ContainerInfo]$container = New-PesterContainer -Path "${ProjectRoot}\tests\dependencies.Tests.ps1"
+$container.Data = @{
+	File = "${ProjectRoot}\dependencies.json"
+}
+
 [PesterConfiguration] $configuration = New-PesterConfiguration
 
-$configuration.Run.Path = "${ProjectRoot}\tests\dependencies.Tests.ps1"
+$configuration.Run.Container = $container
 $configuration.Run.Exit = $true
 $configuration.Output.CIFormat = 'GithubActions'
 $configuration.TestResult.Enabled = $true
