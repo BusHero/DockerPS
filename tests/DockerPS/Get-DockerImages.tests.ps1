@@ -18,12 +18,12 @@ Describe 'Get-DockerImages' {
 	# 	}
 	# }
 
-	# It '--no-trunc' {
-	# 	Get-DockerImages -NoTrunc
-	# 	Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
-	# 		"${args}" -eq "images --format '{{json .}}' --no-trunc"
-	# 	}
-	# }
+	It '--no-trunc' {
+		Get-DockerImages -NoTrunc
+		Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
+			"$($args[0])" -eq 'images --format {{json .}} --no-trunc'
+		}
+	}
 
 	# Describe '--filter' {
 	# 	It 'one filter' {

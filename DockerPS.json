@@ -15,6 +15,17 @@
 				"Linux",
 				"MacOS"
 			],
+			"Parameters": [
+				{
+					"OriginalName": "--no-trunc",
+					"Name": "NoTrunc",
+					"ParameterType": "switch",
+					"ParameterSetName": [
+						"Default"
+					],
+					"Mandatory": false
+				}
+			],
 			"Description": "Gets docker images",
 			"OutputHandlers": [
 				{
