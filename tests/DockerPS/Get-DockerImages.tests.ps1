@@ -111,17 +111,16 @@ Describe 'Get-DockerImages' {
 	# 	}
 	# }
 
-	# Describe 'Get-DockerImages returns an object' {
-	# 	BeforeAll {
-	# 		Mock -ModuleName DockerPS docker { '{"foo": "bar", "bar": "baz"}' }
-	# 		$result = Get-DockerImages
-	# 	}
-	# 	It 'Contains foo property' {
-	# 		$result.foo | Should -Be 'bar'
-	# 	}
-	# 	It 'Contains bar property' {
-	# 		$result.bar | Should -Be 'baz'
-	# 	}
-	# }
+	Describe 'Get-DockerImages returns an object' {
+		BeforeAll {
+			$result = Get-DockerImages
+		}
+		It 'Contains foo property' {
+			$result.foo | Should -Be 'bar'
+		}
+		It 'Contains bar property' {
+			$result.bar | Should -Be 'baz'
+		}
+	}
 }
 
