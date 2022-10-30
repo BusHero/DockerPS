@@ -71,6 +71,7 @@
           "items": {
             "type": "string",
             "enum": [
+              "CreateGithubRelease",
               "GenerateModuleManifest",
               "GenerateNuspec",
               "InstallDependencies",
@@ -89,6 +90,7 @@
           "items": {
             "type": "string",
             "enum": [
+              "CreateGithubRelease",
               "GenerateModuleManifest",
               "GenerateNuspec",
               "InstallDependencies",

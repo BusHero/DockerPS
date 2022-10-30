@@ -8,6 +8,10 @@ using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.NuGet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Git;
+using static Nuke.Common.Tools.GitHub.GitHubTasks;
+using Nuke.Common.Tools.GitHub;
+using Nuke.Common.CI.GitHubActions;
+using Nuke.Common.Tooling;
 
 class Build : NukeBuild
 {
@@ -47,7 +51,7 @@ class Build : NukeBuild
 
 			return PowerShellCore(_ => _
 				.SetFile(SrcPath / "setup.ps1")
-				.AddFileArguments("-Version", $"{DateTime.Now:yyyyMMdd}.{DateTime.Now:HHmmss}.0")
+				.AddFileArguments("-Version", PreReleaseVersion)
 				.AddFileArguments("-Prerelease", prerelease));
 		});
 
@@ -84,4 +88,13 @@ class Build : NukeBuild
 			.SetTargetPath(RootDirectory / "packages" / "*.nupkg")
 			.SetSource(NugetApiUrl)
 			.SetApiKey(NugetApiKey)));
+
+	[PathExecutable]
+	private readonly Tool Gh;
+
+
+	private static string PreReleaseVersion { get; } = $"{DateTime.Now:yyyyMMdd}.{DateTime.Now:HHmmss}.0";
+
+	private Target CreateGithubRelease => _ => _
+		.Executes(() => Gh($"release create {PreReleaseVersion} --generate-notes -p"));
 }
