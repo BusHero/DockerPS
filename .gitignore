@@ -10,3 +10,4 @@ tools/
 test-results/
 packages/
 *.nuspec
+src/DockerPS/

@@ -1,6 +1,9 @@
 Import-Module Microsoft.PowerShell.Crescendo
 
-$modulePath = "${PSScriptRoot}\..\src\DockerPS\"
+$RootDirectory = "${PSScriptRoot}\.."
+$modulePath = "${RootDirectory}\src\DockerPS\"
+
+. "${RootDirectory}\src\parsers.ps1"
 
 New-Item `
 	-Path $modulePath `
@@ -8,5 +11,5 @@ New-Item `
 	-ItemType Directory > $null
 
 Export-CrescendoModule `
-	-ConfigurationFile "${PSScriptRoot}\..\DockerPS.json" `
+	-ConfigurationFile "${RootDirectory}\DockerPS.json" `
 	-ModuleName "${ModulePath}\DockerPS.psm1"

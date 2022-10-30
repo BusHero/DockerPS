@@ -33,6 +33,16 @@
 					"ParameterSetName": [
 						"Default"
 					],
+					"NoGap": false,
+					"Mandatory": false
+				},
+				{
+					"OriginalName": "--filter",
+					"Name": "Filter",
+					"ParameterSetName": [
+						"Default"
+					],
+					"ParameterType": "string[]",
 					"Mandatory": false
 				}
 			],

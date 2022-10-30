@@ -16,8 +16,8 @@ Describe 'Get-DockerImages' {
 		Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
 			$expected = "images --format {{json .}} ${imageName}"
 			$actual = "$($args[0])"
-			Write-Warning "Expected: '$expected'"
-			Write-Warning "Actual:   '$actual'"
+			# Write-Warning "Expected: '$expected'"
+			# Write-Warning "Actual:   '$actual'"
 			$actual -eq $expected
 		}
 	}
@@ -29,87 +29,95 @@ Describe 'Get-DockerImages' {
 		}
 	}
 
-	# Describe '--filter' {
-	# 	It 'one filter' {
-	# 		$filter = 'foo=bar'
-	# 		Get-DockerImages -Filter $filter 
-	# 		Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
-	# 			"${args}" -eq "images --format {{json .}} --filter '${filter}'"
-	# 		}
-	# 	}
+	Describe '--filter' {
+		It 'one filter' {
+			$filter = 'foo=bar'
+			Get-DockerImages -Filter $filter 
+			Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
+				$expected = "images --format {{json .}} --filter ${filter}"
+				$actual = "$($args[0])"
+				Write-Warning "Expected: '$expected'"
+				Write-Warning "Actual:   '$actual'"
+				$actual -eq $expected
+			}
+		}
 
-	# 	It 'two filter' {
-	# 		$filter1 = 'foo=bar'
-	# 		$filter2 = 'bar=baz'
-	# 		Get-DockerImages -Filter $filter1, $filter2
-	# 		Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
-	# 			"${args}" -eq "images --format {{json .}} --filter '${filter1}' --filter '${filter2}'"
-	# 		}
-	# 	}
+		# It 'two filter' {
+		# 	$filter1 = 'foo=bar'
+		# 	$filter2 = 'bar=baz'
+		# 	Get-DockerImages -Filter $filter1, $filter2
+		# 	Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
+		# 		$expected = "images --format {{json .}} --filter ${filter1} --filter ${filter2}"
+		# 		$actual = "$($args[0])"
+		# 		Write-Warning "Expected: '$expected'"
+		# 		Write-Warning "Actual:   '$actual'"
+		# 		$actual -eq $expected
+		# 	}
+		# }
 
-	# 	Describe 'Ignore empty filters' {
-	# 		It 'One filter' {
-	# 			$filter = ''
-	# 			Get-DockerImages -Filter $filter
-	# 			Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
-	# 				"${args}" -eq "images --format {{json .}}"
-	# 			}
-	# 		}
+		# 	Describe 'Ignore empty filters' {
+		# 		It 'One filter' {
+		# 			$filter = ''
+		# 			Get-DockerImages -Filter $filter
+		# 			Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
+		# 				"$($args[0])" -eq "images --format {{json .}}"
+		# 			}
+		# 		}
 			
-	# 		It 'Two filters' {
-	# 			$filter1 = 'foo=bar'
-	# 			$filter2 = ''
-	# 			Get-DockerImages -Filter $filter1, $filter2
-	# 			Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
-	# 				"${args}" -eq "images --format {{json .}} --filter '${filter1}'"
-	# 			}
-	# 		}
-	# 	}
+		# 		It 'Two filters' {
+		# 			$filter1 = 'foo=bar'
+		# 			$filter2 = ''
+		# 			Get-DockerImages -Filter $filter1, $filter2
+		# 			Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
+		# 				"$($args[0])" -eq "images --format {{json .}} --filter '${filter1}'"
+		# 			}
+		# 		}
+		# 	}
 
-	# 	Describe 'Filter as dictionary' {
-	# 		It 'One filter' {
-	# 			$filter = @{
-	# 				foo = 'Bar'
-	# 			}
-	# 			Get-DockerImages -Filter $filter
-	# 			Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
-	# 				"${args}" -eq "images --format {{json .}} --filter 'foo=$($filter.foo)'"
-	# 			}
-	# 		}
+		# 	Describe 'Filter as dictionary' {
+		# 		It 'One filter' {
+		# 			$filter = @{
+		# 				foo = 'Bar'
+		# 			}
+		# 			Get-DockerImages -Filter $filter
+		# 			Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
+		# 				"$($args[0])" -eq "images --format {{json .}} --filter 'foo=$($filter.foo)'"
+		# 			}
+		# 		}
 
-	# 		It 'Hashtable' {
-	# 			$filter = @{
-	# 				foo = 'bar'
-	# 				bar = 'baz'
-	# 			}
-	# 			Get-DockerImages -Filter $filter
-	# 			Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
-	# 				switch ("${args}") {
-	# 					"images --format {{json .}} --filter 'foo=$($filter.foo)' --filter 'bar=$($filter.bar)'" { 
-	# 						return $true
-	# 					}
-	# 					"images --format {{json .}} --filter 'bar=$($filter.bar)' --filter 'foo=$($filter.foo)'" {
-	# 						return $true
-	# 					}
-	# 					Default {
-	# 						return $false
-	# 					}
-	# 				}
-	# 			}
-	# 		}
+		# 		It 'Hashtable' {
+		# 			$filter = @{
+		# 				foo = 'bar'
+		# 				bar = 'baz'
+		# 			}
+		# 			Get-DockerImages -Filter $filter
+		# 			Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
+		# 				switch ("$($args[0])") {
+		# 					"images --format {{json .}} --filter 'foo=$($filter.foo)' --filter 'bar=$($filter.bar)'" { 
+		# 						return $true
+		# 					}
+		# 					"images --format {{json .}} --filter 'bar=$($filter.bar)' --filter 'foo=$($filter.foo)'" {
+		# 						return $true
+		# 					}
+		# 					Default {
+		# 						return $false
+		# 					}
+		# 				}
+		# 			}
+		# 		}
 
-	# 		It 'Two filter ordered' {
-	# 			$filter = [ordered]@{
-	# 				foo = 'Bar'
-	# 				bar = 'Baz'
-	# 			}
-	# 			Get-DockerImages -Filter $filter
-	# 			Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
-	# 				"${args}" -eq "images --format {{json .}} --filter 'foo=$($filter.foo)' --filter 'bar=$($filter.bar)'"
-	# 			}
-	# 		}
-	# 	}
-	# }
+		# 		It 'Two filter ordered' {
+		# 			$filter = [ordered]@{
+		# 				foo = 'Bar'
+		# 				bar = 'Baz'
+		# 			}
+		# 			Get-DockerImages -Filter $filter
+		# 			Should -Invoke -CommandName 'docker' -ModuleName DockerPS -Times 1 -ParameterFilter {
+		# 				"$($args[0])" -eq "images --format {{json .}} --filter 'foo=$($filter.foo)' --filter 'bar=$($filter.bar)'"
+		# 			}
+		# 		}
+		# 	}
+	}
 
 	Describe 'Get-DockerImages returns an object' {
 		BeforeAll {
