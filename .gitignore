@@ -10,3 +10,6 @@ tools/
 test-results/
 packages/
 *.nuspec
+node_modules/
+package.json
+package-lock.json

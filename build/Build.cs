@@ -37,6 +37,10 @@ class Build : NukeBuild
 		.Executes(() => PowerShellCore(_ => _
 			.SetFile(RunnersPath / "script-analyzer.runner.ps1")));
 
+	[GitVersion]
+	readonly GitVersion GitVersion;
+
+
 	private Target GenerateModuleManifest => _ => _
 		.Executes(() =>
 		{
@@ -47,8 +51,8 @@ class Build : NukeBuild
 
 			return PowerShellCore(_ => _
 				.SetFile(SrcPath / "setup.ps1")
-				.AddFileArguments("-Version", $"{DateTime.Now:yyyyMMdd}.{DateTime.Now:HHmmss}.0")
-				.AddFileArguments("-Prerelease", prerelease));
+				.AddFileArguments("-Version", GitVersion.MajorMinorPatch)
+				.AddFileArguments("-Prerelease", GitVersion.NuGetPreReleaseTagV2));
 		});
 
 	private Target TestModuleManifest => _ => _
