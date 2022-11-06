@@ -20,7 +20,7 @@ function Get-DockerImages {
 			"'${Filter}'"
 		}
 	}
-	
+
 	function ConvertArrayToArguments {
 		param (
 			$Filter
@@ -30,7 +30,7 @@ function Get-DockerImages {
 			"'${f}'"
 		}
 	}
-	
+
 	function ConvertHashtableToArguments {
 		param (
 			$Filter
@@ -42,7 +42,7 @@ function Get-DockerImages {
 			}
 		}
 	}
-	
+
 	function ConvertFilterToDockerArguments {
 		param (
 			$Filter
@@ -57,20 +57,20 @@ function Get-DockerImages {
 			return ConvertHashtableToArguments $Filter
 		}
 	}
-	
+
 	function Format-DockerArguments {
 		[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Demo')]
 		param (
 			[string]
 			$Image,
-	
+
 			[switch]
 			$NoTrunc,
-	
+
 			$Filter
 		)
 		$arguments = @()
-	
+
 		$arguments += 'images'
 		$arguments += '--format'
 		$arguments += "'{{json .}}'"
@@ -78,13 +78,13 @@ function Get-DockerImages {
 		if ($NoTrunc) {
 			$arguments += '--no-trunc'
 		}
-	
+
 		$arguments += (ConvertFilterToDockerArguments $Filter)
-	
+
 		$arguments = $arguments | Where-Object { $_ }
 		return [string]::Join(' ', $arguments)
 	}
-	
+
 	$arguments = (Format-DockerArguments -Image $Image -NoTrunc:$NoTrunc -Filter $Filter)
 	return docker $arguments | ConvertFrom-Json
 }

@@ -20,7 +20,7 @@ function Get-DockerContainers {
 			"'${Filter}'"
 		}
 	}
-	
+
 	function ConvertArrayToArguments {
 		param (
 			$Filter
@@ -30,7 +30,7 @@ function Get-DockerContainers {
 			"'${f}'"
 		}
 	}
-	
+
 	function ConvertHashtableToArguments {
 		param (
 			$Filter
@@ -42,7 +42,7 @@ function Get-DockerContainers {
 			}
 		}
 	}
-	
+
 	function ConvertFilterToDockerArguments {
 		param (
 			$Filter
@@ -57,18 +57,18 @@ function Get-DockerContainers {
 			return ConvertHashtableToArguments $Filter
 		}
 	}
-	
+
 	function Format-DockerArguments {
 		[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Demo')]
 		param (
 			[string]
 			$containerName,
-	
+
 			[switch]
 			$NoTrunc
 		)
 		$arguments = @()
-	
+
 		$arguments += 'container'
 		$arguments += 'ls'
 		$arguments += '--format'
