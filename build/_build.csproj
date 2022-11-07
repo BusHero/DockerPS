@@ -9,6 +9,7 @@
     <NukeScriptDirectory>..</NukeScriptDirectory>
     <NukeTelemetryVersion>1</NukeTelemetryVersion>
     <ImplicitUsings>true</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors><WarningLevel>3</WarningLevel>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageDownload Include="GitVersion.Tool" Version="[5.9.0]" />
+    <PackageDownload Include="GitVersion.Tool" Version="[5.8.0]" />
     <PackageDownload Include="NuGet.CommandLine" Version="[6.3.1]" />
   </ItemGroup>
 

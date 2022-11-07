@@ -37,7 +37,7 @@ class Build : NukeBuild
 		.Executes(() => PowerShellCore(_ => _
 			.SetFile(RunnersPath / "script-analyzer.runner.ps1")));
 
-	[GitVersion(Framework = "net6.0")]
+	[GitVersion]
 	readonly GitVersion GitVersion;
 
 
