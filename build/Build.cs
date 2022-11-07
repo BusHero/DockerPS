@@ -8,6 +8,7 @@ using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.NuGet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Git;
+using System.Linq;
 
 class Build : NukeBuild
 {
