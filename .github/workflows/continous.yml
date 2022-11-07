@@ -14,3 +14,15 @@ jobs:
         run: dotnet run --project build -- --target Install-Dependencies
       - name: Run Unit tests
         run: dotnet run --project build -- --target Run-Unit-Tests
+      - name: Invoke PSScriptAnalyzer
+        run: dotnet run --project build -- --target InvokePSAnalyzer
+      - name: Gemerate Module Manifest
+        run: dotnet run --project build -- --target Generate-Module-Manifest
+      - name: Pack
+        run: dotnet run --project build -- --target Pack
+      - name: Publish to Github
+        run: dotnet run --project build -- --target Publish --NugetApiKey ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/upload-artifact@v1
+        with:
+          name: test-results
+          path: ./test-results
