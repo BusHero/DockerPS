@@ -88,4 +88,7 @@ class Build : NukeBuild
 			.SetTargetPath(RootDirectory / "packages" / "*.nupkg")
 			.SetSource(NugetApiUrl)
 			.SetApiKey(NugetApiKey)));
+
+	private Target RestoreTools => _ => _
+		.Executes(() => DotNetToolRestore());
 }
