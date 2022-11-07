@@ -21,7 +21,7 @@ jobs:
       - name: Install Dependencies
         run: ./build.ps1 --target Install-Dependencies
       - name: tree
-        run: tree C:\Users\runneradmin\.nuget\packages\
+        run: tree C:\Users\runneradmin\.nuget\packages\ /F
       # - name: Run unit tests
       #   run: ./build.ps1 --target Run-Unit-Tests
       # - name: Invoke PSScriptAnalyzer
