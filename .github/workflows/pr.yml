@@ -16,7 +16,7 @@ jobs:
             ~/.nuget/packages
           key: ${{ runner.os }}-nuke
       - name: Restore tools
-        run: ./build.ps1 --target Restore-Tools
+        run: dotnet tool restore
       - name: Install Dependencies
         run: ./build.ps1 --target Install-Dependencies
       - name: Run unit tests
