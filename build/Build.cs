@@ -9,6 +9,7 @@ using Nuke.Common.Tools.NuGet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Git;
 using System.Linq;
+using Serilog;
 
 class Build : NukeBuild
 {
@@ -18,7 +19,10 @@ class Build : NukeBuild
 	private AbsolutePath SrcPath => RootDirectory / "src";
 	private AbsolutePath RunnersPath => RootDirectory / "runners";
 
-	public static int Main() => Execute<Build>(x => x.InstallDependencies);
+	public static int Main() => Execute<Build>(x => x.Print);
+
+	Target Print => _ => _
+		.Executes(() => Log.Information($"GitVersion = {GitVersion.MajorMinorPatch}"));
 
 	private Target InstallDependencies => _ => _
 		.Executes(() => PowerShellCore(_ => _
