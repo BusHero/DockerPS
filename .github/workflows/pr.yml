@@ -8,6 +8,9 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "5.0.x"
       # - name: Cache .nuke/temp, ~/.nuget/packages
       #   uses: actions/cache@v2
       #   with:
@@ -17,17 +20,19 @@ jobs:
       #     key: ${{ runner.os }}-nuke
       - name: Install Dependencies
         run: ./build.ps1 --target Install-Dependencies
-      - name: Run unit tests
-        run: ./build.ps1 --target Run-Unit-Tests
-      - name: Invoke PSScriptAnalyzer
-        run: ./build.ps1 --target InvokePSAnalyzer
-      - name: Generate Module Manifest
-        run: ./build.ps1 --target Generate-Module-Manifest
-      - name: Pack
-        run: ./build.ps1 --target Pack
-      - name: Publish to Github
-        run: ./build.ps1 --target Publish --NugetApiKey ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/upload-artifact@v1
-        with:
-          name: test-results
-          path: ./test-results
+      - name: tree
+        run: tree C:\Users\runneradmin\.nuget\packages\
+      # - name: Run unit tests
+      #   run: ./build.ps1 --target Run-Unit-Tests
+      # - name: Invoke PSScriptAnalyzer
+      #   run: ./build.ps1 --target InvokePSAnalyzer
+      # - name: Generate Module Manifest
+      #   run: ./build.ps1 --target Generate-Module-Manifest
+      # - name: Pack
+      #   run: ./build.ps1 --target Pack
+      # - name: Publish to Github
+      #   run: ./build.ps1 --target Publish --NugetApiKey ${{ secrets.GITHUB_TOKEN }}
+      # - uses: actions/upload-artifact@v1
+      #   with:
+      #     name: test-results
+      #     path: ./test-results
