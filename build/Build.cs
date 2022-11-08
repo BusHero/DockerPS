@@ -8,6 +8,8 @@ using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.NuGet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Git;
+using System.Linq;
+using Serilog;
 
 class Build : NukeBuild
 {
@@ -17,7 +19,10 @@ class Build : NukeBuild
 	private AbsolutePath SrcPath => RootDirectory / "src";
 	private AbsolutePath RunnersPath => RootDirectory / "runners";
 
-	public static int Main() => Execute<Build>(x => x.InstallDependencies);
+	public static int Main() => Execute<Build>(x => x.Print);
+
+	Target Print => _ => _
+		.Executes(() => Log.Information($"GitVersion = {GitVersion.MajorMinorPatch}"));
 
 	private Target InstallDependencies => _ => _
 		.Executes(() => PowerShellCore(_ => _
@@ -37,6 +42,10 @@ class Build : NukeBuild
 		.Executes(() => PowerShellCore(_ => _
 			.SetFile(RunnersPath / "script-analyzer.runner.ps1")));
 
+	[GitVersion]
+	readonly GitVersion GitVersion;
+
+
 	private Target GenerateModuleManifest => _ => _
 		.Executes(() =>
 		{
@@ -47,8 +56,8 @@ class Build : NukeBuild
 
 			return PowerShellCore(_ => _
 				.SetFile(SrcPath / "setup.ps1")
-				.AddFileArguments("-Version", $"{DateTime.Now:yyyyMMdd}.{DateTime.Now:HHmmss}.0")
-				.AddFileArguments("-Prerelease", prerelease));
+				.AddFileArguments("-Version", GitVersion.MajorMinorPatch)
+				.AddFileArguments("-Prerelease", GitVersion.NuGetPreReleaseTagV2));
 		});
 
 	private Target TestModuleManifest => _ => _
@@ -84,4 +93,7 @@ class Build : NukeBuild
 			.SetTargetPath(RootDirectory / "packages" / "*.nupkg")
 			.SetSource(NugetApiUrl)
 			.SetApiKey(NugetApiKey)));
+
+	private Target RestoreTools => _ => _
+		.Executes(() => DotNetToolRestore());
 }

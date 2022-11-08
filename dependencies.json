@@ -1,9 +1,5 @@
 [
   {
-    "Name": "Microsoft.PowerShell.Crescendo",
-    "Version": "1.0.0"
-  },
-  {
     "Name": "Pester",
     "Version": "5.3.3"
   },
