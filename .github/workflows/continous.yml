@@ -1,7 +1,5 @@
 name: continous
-
-on: [push, workflow_dispatch]
-
+on: [pull_request, workflow_dispatch]
 jobs:
   GitVersion:
     runs-on: windows-latest
@@ -20,8 +18,10 @@ jobs:
         run: dotnet run --project build -- --target Generate-Module-Manifest
       - name: Pack
         run: dotnet run --project build -- --target Pack
+      - name: Register Repository
+        run: dotnet nuget add source --username BusHero --password ${{ secrets.POM }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/BusHero/index.json"
       - name: Publish to Github
-        run: dotnet run --project build -- --target Publish --NugetApiKey ${{ secrets.GITHUB_TOKEN }}
+        run: dotnet run --project build -- --target Publish --NugetApiKey ${{ secrets.POM }}
       - uses: actions/upload-artifact@v1
         with:
           name: test-results
