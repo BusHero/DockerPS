@@ -1,7 +1,5 @@
 name: continous
-
-on: [push, workflow_dispatch]
-
+on: [pull_request, workflow_dispatch]
 jobs:
   GitVersion:
     runs-on: windows-latest
