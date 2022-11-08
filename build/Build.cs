@@ -91,7 +91,7 @@ class Build : NukeBuild
 		.Requires(() => NugetApiKey)
 		.Executes(() => DotNetNuGetPush(_ => _
 			.SetTargetPath(RootDirectory / "packages" / "*.nupkg")
-			.SetSource("github")
+			.SetSource(NugetApiUrl)
 			.SetApiKey(NugetApiKey)));
 
 	private Target RestoreTools => _ => _
