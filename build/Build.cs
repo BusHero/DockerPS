@@ -3,14 +3,12 @@ using Nuke.Common.IO;
 using Nuke.Common.Tools.PowerShell;
 using static PowerShellCoreTasks;
 using static Nuke.Common.Tools.NuGet.NuGetTasks;
-using static Nuke.Common.Tools.DotNet.DotNetTasks;
-using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.NuGet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Git;
 using Serilog;
 
-class Build : NukeBuild
+partial class Build : NukeBuild
 {
 	[GitRepository]
 	readonly GitRepository Repository;
@@ -77,22 +75,4 @@ class Build : NukeBuild
 			.SetTargetPath(SrcPath / "DockerPS" / "DockerPS.nuspec")
 			.SetOutputDirectory(RootDirectory / "packages")
 			.AddProperty("NoWarn", "NU5110,NU5111,NU5125")));
-
-	[Parameter]
-	readonly string NugetApiUrl = "https://nuget.pkg.github.com/BusHero/index.json";
-
-	[Parameter]
-	[Secret]
-	readonly string NugetApiKey;
-
-	private Target Publish => _ => _
-		.Requires(() => NugetApiUrl)
-		.Requires(() => NugetApiKey)
-		.Executes(() => DotNetNuGetPush(_ => _
-			.SetTargetPath(RootDirectory / "packages" / "*.nupkg")
-			.SetSource("github")
-			.SetApiKey(NugetApiKey)));
-
-	private Target RestoreTools => _ => _
-		.Executes(() => DotNetToolRestore());
 }

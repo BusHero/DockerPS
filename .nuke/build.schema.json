@@ -78,7 +78,7 @@
               "Pack",
               "Print",
               "Publish",
-              "RestoreTools",
+              "RegisterRepository",
               "RunUnitTests",
               "TestInstallDependencies",
               "TestModuleManifest"
@@ -98,7 +98,7 @@
               "Pack",
               "Print",
               "Publish",
-              "RestoreTools",
+              "RegisterRepository",
               "RunUnitTests",
               "TestInstallDependencies",
               "TestModuleManifest"
