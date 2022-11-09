@@ -22,11 +22,11 @@ partial class Build : NukeBuild
 		.Executes(() => Log.Information($"GitVersion = {GitVersion.MajorMinorPatch}"));
 
 	private Target InstallDependencies => _ => _
+		.Triggers(TestInstallDependencies)
 		.Executes(() => PowerShellCore(_ => _
 			.SetFile(SrcPath / "Install-Dependencies.ps1")));
 
 	private Target TestInstallDependencies => _ => _
-		.TriggeredBy(InstallDependencies)
 		.Unlisted()
 		.Executes(() => PowerShellCore(_ => _
 			.SetFile(RunnersPath / "dependencies.runner.ps1")));
@@ -44,6 +44,7 @@ partial class Build : NukeBuild
 
 
 	private Target GenerateModuleManifest => _ => _
+	 	.Triggers(TestModuleManifest)
 		.Executes(() =>
 		{
 			var segments = Repository.Branch.Split("/");
@@ -58,7 +59,6 @@ partial class Build : NukeBuild
 		});
 
 	private Target TestModuleManifest => _ => _
-		.TriggeredBy(GenerateModuleManifest)
 		.Executes(() => PowerShellCore(_ => _
 			.SetFile(RunnersPath / "test-modulemanifest.runner.ps1")));
 

@@ -1,7 +1,7 @@
 name: continous
 on: [pull_request, workflow_dispatch]
 jobs:
-  GitVersion:
+  Generate-nuget-package:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v1
