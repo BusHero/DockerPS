@@ -63,6 +63,7 @@ partial class Build : NukeBuild
 			.SetFile(RunnersPath / "test-modulemanifest.runner.ps1")));
 
 	private Target GenerateNuspec => _ => _
+	 	.DependsOn(GenerateModuleManifest)
 		.Executes(() => PowerShellCore(_ => _
 			.SetFile(RunnersPath / "nuspec.ps1")
 			.AddFileArguments(
@@ -71,7 +72,6 @@ partial class Build : NukeBuild
 
 	private Target Pack => _ => _
 		.DependsOn(GenerateNuspec)
-		.DependsOn(GenerateModuleManifest)
 		.Executes(() => NuGetPack(_ => _
 			.SetTargetPath(SrcPath / "DockerPS" / "DockerPS.nuspec")
 			.SetOutputDirectory(RootDirectory / "packages")
