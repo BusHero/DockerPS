@@ -8,7 +8,6 @@ using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.NuGet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Git;
-using System.Linq;
 using Serilog;
 
 class Build : NukeBuild
