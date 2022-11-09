@@ -36,8 +36,11 @@ partial class Build
 			.SetUsername("BusHero")
 			.SetStorePasswordInClearText(true)));
 
+	private Target Foo => _ => _
+		.DependsOn(InstallDependencies)
+		.DependentFor(Continous);
+
 	private Target Continous => _ => _
-		.Before(InstallDependencies)
 		.DependsOn(RunUnitTests)
 		.DependsOn(InvokePSAnalyzer)
 		.Triggers(Publish);

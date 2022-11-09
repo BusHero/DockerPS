@@ -75,6 +75,7 @@
             "type": "string",
             "enum": [
               "Continous",
+              "Foo",
               "GenerateModuleManifest",
               "GenerateNuspec",
               "InstallDependencies",
@@ -96,6 +97,7 @@
             "type": "string",
             "enum": [
               "Continous",
+              "Foo",
               "GenerateModuleManifest",
               "GenerateNuspec",
               "InstallDependencies",
