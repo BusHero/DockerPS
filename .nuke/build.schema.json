@@ -61,6 +61,9 @@
             "type": "string"
           }
         },
+        "RepositoryName": {
+          "type": "string"
+        },
         "Root": {
           "type": "string",
           "description": "Root directory during build execution"
@@ -71,6 +74,7 @@
           "items": {
             "type": "string",
             "enum": [
+              "Continous",
               "GenerateModuleManifest",
               "GenerateNuspec",
               "InstallDependencies",
@@ -91,6 +95,7 @@
           "items": {
             "type": "string",
             "enum": [
+              "Continous",
               "GenerateModuleManifest",
               "GenerateNuspec",
               "InstallDependencies",

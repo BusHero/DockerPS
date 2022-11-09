@@ -71,6 +71,7 @@ partial class Build : NukeBuild
 
 	private Target Pack => _ => _
 		.DependsOn(GenerateNuspec)
+		.DependsOn(GenerateModuleManifest)
 		.Executes(() => NuGetPack(_ => _
 			.SetTargetPath(SrcPath / "DockerPS" / "DockerPS.nuspec")
 			.SetOutputDirectory(RootDirectory / "packages")

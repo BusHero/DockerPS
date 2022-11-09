@@ -19,6 +19,7 @@ partial class Build
 		.Requires(() => NugetApiUrl)
 		.Requires(() => NugetApiKey)
 		.DependsOn(RegisterRepository)
+		.DependsOn(Pack)
 		.Executes(() => DotNetNuGetPush(_ => _
 			.SetTargetPath(RootDirectory / "packages" / "*.nupkg")
 			.SetSource(RepositoryName)
@@ -36,11 +37,9 @@ partial class Build
 			.SetStorePasswordInClearText(true)));
 
 	private Target Continous => _ => _
-		.Triggers(InstallDependencies)
-		.Triggers(RunUnitTests)
-		.Triggers(InvokePSAnalyzer)
-		.Triggers(GenerateModuleManifest)
-		.Triggers(Pack)
+		.Before(InstallDependencies)
+		.DependsOn(RunUnitTests)
+		.DependsOn(InvokePSAnalyzer)
 		.Triggers(Publish);
 
 	private static bool DoesPackageSourceExist(string packageSource) => SettingsUtility
