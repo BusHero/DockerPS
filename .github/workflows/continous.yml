@@ -8,18 +8,8 @@ jobs:
       - uses: actions/setup-dotnet@v3
         with:
           dotnet-version: "7.0.x"
-      - name: Install Dependencies
-        run: dotnet run --project build -- --target Install-Dependencies
-      - name: Run Unit tests
-        run: dotnet run --project build -- --target Run-Unit-Tests
-      - name: Invoke PSScriptAnalyzer
-        run: dotnet run --project build -- --target InvokePSAnalyzer
-      - name: Gemerate Module Manifest
-        run: dotnet run --project build -- --target Generate-Module-Manifest
-      - name: Pack
-        run: dotnet run --project build -- --target Pack
       - name: Publish to Github
-        run: dotnet run --project build -- --target Publish --NugetApiKey ${{ secrets.POM }}
+        run: dotnet run --project build -- --target Continous --NugetApiKey ${{ secrets.POM }}
       - uses: actions/upload-artifact@v1
         with:
           name: test-results

@@ -35,12 +35,16 @@ partial class Build
 			.SetUsername("BusHero")
 			.SetStorePasswordInClearText(true)));
 
-	private static bool DoesPackageSourceExist(string packageSource)
-	{
-		var settings = Settings.LoadDefaultSettings(default);
-		return SettingsUtility
-			.GetEnabledSources(settings)
-			.Select(source => source.Name)
-			.Any(source => source == packageSource);
-	}
+	private Target Continous => _ => _
+		.Triggers(InstallDependencies)
+		.Triggers(RunUnitTests)
+		.Triggers(InvokePSAnalyzer)
+		.Triggers(GenerateModuleManifest)
+		.Triggers(Pack)
+		.Triggers(Publish);
+
+	private static bool DoesPackageSourceExist(string packageSource) => SettingsUtility
+		.GetEnabledSources(Settings.LoadDefaultSettings(default))
+		.Select(source => source.Name)
+		.Any(source => source == packageSource);
 }
