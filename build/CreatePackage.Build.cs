@@ -25,7 +25,6 @@ partial class Build
 			.AddProperty("NoWarn", "NU5110,NU5111,NU5125")));
 
 	private Target Publish => _ => _
-	 	.DependsOnContext()
 		.Requires(() => NugetApiUrl)
 		.Requires(() => NugetApiKey)
 		.DependsOn(RegisterRepository)
