@@ -15,6 +15,7 @@ jobs:
           path: |
             ~/.nuget/packages
             .nuke/temp
+            ~/Documents/PowerShell/Modules
           key: ${{ runner.os }}-everything
       - name: Publish to Github
         run: ./build.ps1 --target Step1 --NugetApiKey ${{ secrets.POM }}
