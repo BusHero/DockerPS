@@ -74,19 +74,18 @@
           "items": {
             "type": "string",
             "enum": [
-              "Continous",
-              "Foo",
               "GenerateModuleManifest",
               "GenerateNuspec",
               "InstallDependencies",
               "InvokePSAnalyzer",
               "Pack",
-              "Print",
               "Publish",
               "RegisterRepository",
               "RunUnitTests",
-              "TestInstallDependencies",
-              "TestModuleManifest"
+              "Step1",
+              "Step2",
+              "Step3",
+              "Tests"
             ]
           }
         },
@@ -96,19 +95,18 @@
           "items": {
             "type": "string",
             "enum": [
-              "Continous",
-              "Foo",
               "GenerateModuleManifest",
               "GenerateNuspec",
               "InstallDependencies",
               "InvokePSAnalyzer",
               "Pack",
-              "Print",
               "Publish",
               "RegisterRepository",
               "RunUnitTests",
-              "TestInstallDependencies",
-              "TestModuleManifest"
+              "Step1",
+              "Step2",
+              "Step3",
+              "Tests"
             ]
           }
         },

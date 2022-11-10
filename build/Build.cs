@@ -2,8 +2,6 @@ using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.Tools.PowerShell;
 using static PowerShellCoreTasks;
-using static Nuke.Common.Tools.NuGet.NuGetTasks;
-using Nuke.Common.Tools.NuGet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Git;
 using Serilog;
@@ -16,20 +14,18 @@ partial class Build : NukeBuild
 	private AbsolutePath SrcPath => RootDirectory / "src";
 	private AbsolutePath RunnersPath => RootDirectory / "runners";
 
-	public static int Main() => Execute<Build>(x => x.Print);
-
-	Target Print => _ => _
-		.Executes(() => Log.Information($"GitVersion = {GitVersion.MajorMinorPatch}"));
+	public static int Main() => Execute<Build>(x => x.Step1);
 
 	private Target InstallDependencies => _ => _
-		.Triggers(TestInstallDependencies)
-		.Executes(() => PowerShellCore(_ => _
-			.SetFile(SrcPath / "Install-Dependencies.ps1")));
+	 	.DependentFor(GenerateModuleManifest, RunUnitTests, InvokePSAnalyzer)
+		.Executes(() =>
+		{
+			PowerShellCore(_ => _
+				.SetFile(SrcPath / "Install-Dependencies.ps1"));
 
-	private Target TestInstallDependencies => _ => _
-		.Unlisted()
-		.Executes(() => PowerShellCore(_ => _
-			.SetFile(RunnersPath / "dependencies.runner.ps1")));
+			PowerShellCore(_ => _
+						.SetFile(RunnersPath / "dependencies.runner.ps1"));
+		});
 
 	private Target RunUnitTests => _ => _
 		.Executes(() => PowerShellCore(_ => _
@@ -44,7 +40,6 @@ partial class Build : NukeBuild
 
 
 	private Target GenerateModuleManifest => _ => _
-	 	.Triggers(TestModuleManifest)
 		.Executes(() =>
 		{
 			var segments = Repository.Branch.Split("/");
@@ -52,15 +47,14 @@ partial class Build : NukeBuild
 				? segments[0]
 				: segments.Last();
 
-			return PowerShellCore(_ => _
+			PowerShellCore(_ => _
 				.SetFile(SrcPath / "setup.ps1")
 				.AddFileArguments("-Version", GitVersion.MajorMinorPatch)
 				.AddFileArguments("-Prerelease", GitVersion.NuGetPreReleaseTagV2));
-		});
 
-	private Target TestModuleManifest => _ => _
-		.Executes(() => PowerShellCore(_ => _
-			.SetFile(RunnersPath / "test-modulemanifest.runner.ps1")));
+			PowerShellCore(_ => _
+				.SetFile(RunnersPath / "test-modulemanifest.runner.ps1"));
+		});
 
 	private Target GenerateNuspec => _ => _
 	 	.DependsOn(GenerateModuleManifest)
@@ -70,10 +64,4 @@ partial class Build : NukeBuild
 				"-ManifestPath", SrcPath / "DockerPS" / "DockerPS.psd1",
 				"-DestinationFolder", SrcPath / "DockerPS")));
 
-	private Target Pack => _ => _
-		.DependsOn(GenerateNuspec)
-		.Executes(() => NuGetPack(_ => _
-			.SetTargetPath(SrcPath / "DockerPS" / "DockerPS.nuspec")
-			.SetOutputDirectory(RootDirectory / "packages")
-			.AddProperty("NoWarn", "NU5110,NU5111,NU5125")));
 }
