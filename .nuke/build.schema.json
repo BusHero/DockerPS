@@ -61,6 +61,9 @@
             "type": "string"
           }
         },
+        "RepositoryName": {
+          "type": "string"
+        },
         "Root": {
           "type": "string",
           "description": "Root directory during build execution"
@@ -76,12 +79,13 @@
               "InstallDependencies",
               "InvokePSAnalyzer",
               "Pack",
-              "Print",
               "Publish",
-              "RestoreTools",
+              "RegisterRepository",
               "RunUnitTests",
-              "TestInstallDependencies",
-              "TestModuleManifest"
+              "Step1",
+              "Step2",
+              "Step3",
+              "Tests"
             ]
           }
         },
@@ -96,12 +100,13 @@
               "InstallDependencies",
               "InvokePSAnalyzer",
               "Pack",
-              "Print",
               "Publish",
-              "RestoreTools",
+              "RegisterRepository",
               "RunUnitTests",
-              "TestInstallDependencies",
-              "TestModuleManifest"
+              "Step1",
+              "Step2",
+              "Step3",
+              "Tests"
             ]
           }
         },

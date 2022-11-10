@@ -1,7 +1,6 @@
 using Nuke.Common.Tools.PowerShell;
 using Nuke.Common.Tooling;
 using static Nuke.Common.Tools.PowerShell.PowerShellTasks;
-using System.Collections.Generic;
 
 public static class PowerShellCoreTasks
 {
