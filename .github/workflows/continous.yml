@@ -8,6 +8,15 @@ jobs:
       - uses: actions/setup-dotnet@v3
         with:
           dotnet-version: "7.0.x"
+      - name: Cache everything
+        id: cache-nuke-build
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.nuget/packages
+            .nuke/temp
+            ~/Documents/PowerShell/Modules
+          key: ${{ runner.os }}-everything
       - name: Publish to Github
         run: ./build.ps1 --target Step1 --NugetApiKey ${{ secrets.POM }}
       - uses: actions/upload-artifact@v1
