@@ -10,7 +10,7 @@ param(
 )
 
 $constants = & "${PSScriptRoot}\..\constants.ps1"
-$manifestPath = "${PSScriptRoot}\$($constants.ProjectName)\$($constants.ProjectName).psd1"
+$manifestPath = "${PSScriptRoot}\..\src\$($constants.ProjectName)\$($constants.ProjectName).psd1"
 
 New-ModuleManifest `
 	-Guid $constants.ProjectGUID `
