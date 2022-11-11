@@ -18,6 +18,9 @@ jobs:
             ~/Documents/PowerShell/Modules
           key: ${{ runner.os }}-everything
       - name: Publish to Github
+        env:
+          DOTNET_NOLOGO: true
+          DOTNET_CLI_TELEMETRY_OPTOUT: false
         run: ./build.ps1 --target Step1 --NugetApiKey ${{ secrets.POM }}
       - uses: actions/upload-artifact@v1
         with:
