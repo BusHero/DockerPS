@@ -21,7 +21,7 @@ partial class Build : NukeBuild
 		.Executes(() =>
 		{
 			PowerShellCore(_ => _
-				.SetFile(SrcPath / "Install-Dependencies.ps1"));
+				.SetFile(RunnersPath / "Install-Dependencies.ps1"));
 
 			PowerShellCore(_ => _
 						.SetFile(RunnersPath / "dependencies.runner.ps1"));
