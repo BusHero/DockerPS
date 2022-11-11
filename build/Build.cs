@@ -48,7 +48,7 @@ partial class Build : NukeBuild
 				: segments.Last();
 
 			PowerShellCore(_ => _
-				.SetFile(SrcPath / "setup.ps1")
+				.SetFile(RunnersPath / "setup.ps1")
 				.AddFileArguments("-Version", GitVersion.MajorMinorPatch)
 				.AddFileArguments("-Prerelease", GitVersion.NuGetPreReleaseTagV2));
 
