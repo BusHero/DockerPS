@@ -55,7 +55,8 @@ partial class Build : NukeBuild
 
 				if (!string.IsNullOrEmpty(GitVersion.NuGetPreReleaseTagV2))
 				{
-					settings.AddFileArguments("-Prerelease", GitVersion.NuGetPreReleaseTagV2);
+					settings = settings
+						.AddFileArguments("-Prerelease", GitVersion.NuGetPreReleaseTagV2);
 				}
 
 				return settings;
