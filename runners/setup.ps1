@@ -12,7 +12,6 @@ $constants = & "${PSScriptRoot}\..\constants.ps1"
 $manifestPath = "${PSScriptRoot}\..\src\$($constants.ProjectName)\$($constants.ProjectName).psd1"
 
 $moduleManifestArgs = @{
-
 	Guid              = $constants.ProjectGUID
 	Path              = $manifestPath
 	Description       = 'Some description here and there'
@@ -25,7 +24,7 @@ $moduleManifestArgs = @{
 	FunctionsToExport = 'Get-DockerImages', 'Get-DockerContainers'
 }
 if ($Prerelease) {
-	$args.Prerelease = $Prerelease
+	$moduleManifestArgs.Prerelease = $Prerelease
 }
 
 New-ModuleManifest @moduleManifestArgs
