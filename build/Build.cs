@@ -47,10 +47,20 @@ partial class Build : NukeBuild
 				? segments[0]
 				: segments.Last();
 
-			PowerShellCore(_ => _
-				.SetFile(RunnersPath / "setup.ps1")
-				.AddFileArguments("-Version", GitVersion.MajorMinorPatch)
-				.AddFileArguments("-Prerelease", GitVersion.NuGetPreReleaseTagV2));
+			PowerShellCore(_ =>
+			{
+				var settings = _
+					.SetFile(RunnersPath / "setup.ps1")
+					.AddFileArguments("-Version", GitVersion.MajorMinorPatch);
+
+				if (!string.IsNullOrEmpty(GitVersion.NuGetPreReleaseTagV2))
+				{
+					settings = settings
+						.AddFileArguments("-Prerelease", GitVersion.NuGetPreReleaseTagV2);
+				}
+
+				return settings;
+			});
 
 			PowerShellCore(_ => _
 				.SetFile(RunnersPath / "test-modulemanifest.runner.ps1"));
