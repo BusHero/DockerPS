@@ -46,6 +46,7 @@ partial class Build
 
 	private Target Tests => _ => _
 		.DependsOn(RunUnitTests)
+		.DependsOn(RunIntegrationTests)
 		.DependsOn(InvokePSAnalyzer);
 
 	private static bool DoesPackageSourceExist(string packageSource) => SettingsUtility

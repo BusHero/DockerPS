@@ -4,7 +4,6 @@ using Nuke.Common.Tools.PowerShell;
 using static PowerShellCoreTasks;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Git;
-using Serilog;
 
 partial class Build : NukeBuild
 {
@@ -30,6 +29,11 @@ partial class Build : NukeBuild
 	private Target RunUnitTests => _ => _
 		.Executes(() => PowerShellCore(_ => _
 			.SetFile(RunnersPath / "unit-tests.runner.ps1")));
+
+	private Target RunIntegrationTests => _ => _
+	 	.OnlyWhenStatic(() => IsLocalBuild)
+		.Executes(() => PowerShellCore(_ => _
+			.SetFile(RunnersPath / "integration-tests.runner.ps1")));
 
 	private Target InvokePSAnalyzer => _ => _
 		.Executes(() => PowerShellCore(_ => _

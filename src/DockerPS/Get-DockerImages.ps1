@@ -82,9 +82,11 @@ function Get-DockerImages {
 		$arguments += (ConvertFilterToDockerArguments $Filter)
 
 		$arguments = $arguments | Where-Object { $_ }
-		return [string]::Join(' ', $arguments)
+
+		return $arguments
 	}
 
 	$arguments = (Format-DockerArguments -Image $Image -NoTrunc:$NoTrunc -Filter $Filter)
-	return docker $arguments | ConvertFrom-Json
+	$result = [array](docker $arguments)
+	return $result | ForEach-Object { $_.Substring(1, $_.Length - 2) } | ConvertFrom-Json
 }
