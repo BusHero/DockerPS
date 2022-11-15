@@ -6,7 +6,7 @@ Describe 'Get Docker-Images' {
 	Describe 'Get-DockerImages' {
 		BeforeAll {
 			$imageName = "image_$(New-Guid)"
-			'FROM hello-world' | docker build -t $imageName -
+			'FROM hello-world' | docker build -t $imageName - 2> $null
 		}
 
 		It 'Get-DockerImages' {
@@ -16,6 +16,21 @@ Describe 'Get Docker-Images' {
 
 		AfterAll {
 			docker image rm $imageName
+		}
+	}
+
+	Describe 'Get-DockerContainers' {
+		BeforeAll {
+			$containerName = "container_$(New-Guid)"
+			docker run --name $containerName -it -d --rm alpine
+		}
+		It 'Get-DockerContainers' {
+			Get-DockerContainers |
+			Select-Object -ExpandProperty Names |
+			Should -Contain $containerName
+		}
+		AfterAll {
+			docker stop $containerName
 		}
 	}
 

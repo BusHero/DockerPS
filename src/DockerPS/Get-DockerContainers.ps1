@@ -2,9 +2,6 @@ function Get-DockerContainers {
 	[CmdletBinding(HelpUri = 'https://github.com/BusHero/DockerPS/wiki/Get-DockerContainers')]
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Demo')]
 	param (
-		[string]
-		$containerName,
-
 		[switch]
 		$NoTrunc,
 
@@ -61,11 +58,10 @@ function Get-DockerContainers {
 	function Format-DockerArguments {
 		[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Demo')]
 		param (
-			[string]
-			$containerName,
-
 			[switch]
-			$NoTrunc
+			$NoTrunc,
+
+			$Filter
 		)
 		$arguments = @()
 
@@ -73,18 +69,17 @@ function Get-DockerContainers {
 		$arguments += 'ls'
 		$arguments += '--format'
 		$arguments += "'{{json .}}'"
-		$arguments += $containerName
 		if ($NoTrunc) {
 			$arguments += '--no-trunc'
 		}
 		$arguments += (ConvertFilterToDockerArguments $Filter)
 		$arguments = $arguments | Where-Object { $_ }
-		return [string]::Join(' ', $arguments)
+		return $arguments
 	}
 
 	$arguments = (Format-DockerArguments `
-			-containerName $containerName `
 			-NoTrunc:$NoTrunc `
 			-Filter $Filter)
-	return docker $arguments | ConvertFrom-Json
+	$result = [array](docker $arguments)
+	return $result | ForEach-Object { $_.Substring(1, $_.Length - 2) } | ConvertFrom-Json
 }

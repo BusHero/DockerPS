@@ -4,37 +4,29 @@ BeforeAll {
 
 Describe 'Get-DockerContainers' {
 	BeforeAll {
-		Mock docker { }
+		Mock docker { '"{"foo": "bar", "bar": "baz"}"' }
 	}
 
 	It 'No parameters' {
 		Get-DockerContainers
 		Should -Invoke -CommandName 'docker' -Exactly -Times 1 -ParameterFilter {
-			"$args" -eq "container ls --format '{{json .}}'"
-		}
-	}
-
-	It 'Specify container name' {
-		$containerName = 'foo'
-		Get-DockerContainers -containerName $containerName
-		Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
-			"$args" -eq "container ls --format '{{json .}}' ${containerName}"
+			"$($args[0])" -eq "container ls --format '{{json .}}'"
 		}
 	}
 
 	It '--no-trunc' {
 		Get-DockerContainers -NoTrunc
 		Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
-			"$args" -eq "container ls --format '{{json .}}' --no-trunc"
+			"$($args[0])" -eq "container ls --format '{{json .}}' --no-trunc"
 		}
 	}
 
 	Context 'Filters' {
 		It 'one filter' {
 			$filter = 'foo=bar'
-			Get-DockerContainers -Filter $filter 
+			Get-DockerContainers -Filter $filter
 			Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
-				"$args" -eq "container ls --format '{{json .}}' --filter '${filter}'"
+				"$($args[0])" -eq "container ls --format '{{json .}}' --filter '${filter}'"
 			}
 		}
 
@@ -43,7 +35,7 @@ Describe 'Get-DockerContainers' {
 			$filter2 = 'bar=baz'
 			Get-DockerContainers -Filter $filter1, $filter2
 			Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
-				"$args" -eq "container ls --format '{{json .}}' --filter '${filter1}' --filter '${filter2}'"
+				"$($args[0])" -eq "container ls --format '{{json .}}' --filter '${filter1}' --filter '${filter2}'"
 			}
 		}
 
@@ -52,16 +44,16 @@ Describe 'Get-DockerContainers' {
 				$filter = ''
 				Get-DockerContainers -Filter $filter
 				Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
-					"$args" -eq "container ls --format '{{json .}}'"
+					"$($args[0])" -eq "container ls --format '{{json .}}'"
 				}
 			}
-			
+
 			It 'Two filters' {
 				$filter1 = 'foo=bar'
 				$filter2 = ''
 				Get-DockerContainers -Filter $filter1, $filter2
 				Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
-					"$args" -eq "container ls --format '{{json .}}' --filter '${filter1}'"
+					"$($args[0])" -eq "container ls --format '{{json .}}' --filter '${filter1}'"
 				}
 			}
 		}
@@ -72,7 +64,7 @@ Describe 'Get-DockerContainers' {
 				}
 				Get-DockerContainers -Filter $filter
 				Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
-					"$args" -eq "container ls --format '{{json .}}' --filter 'foo=$($filter.foo)'"
+					"$($args[0])" -eq "container ls --format '{{json .}}' --filter 'foo=$($filter.foo)'"
 				}
 			}
 
@@ -83,7 +75,7 @@ Describe 'Get-DockerContainers' {
 				}
 				Get-DockerContainers -Filter $filter
 				Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
-					switch ("${args}") {
+					switch ("$($args[0])") {
 						"container ls --format '{{json .}}' --filter 'foo=$($filter.foo)' --filter 'bar=$($filter.bar)'" { return $true }
 						"container ls --format '{{json .}}' --filter 'bar=$($filter.bar)' --filter 'foo=$($filter.foo)'" { return $true }
 						Default { return $false }
@@ -102,18 +94,17 @@ Describe 'Get-DockerContainers' {
 				}
 			}
 		}
+		Context 'Get-DockerImages returns an object' {
+			BeforeAll {
+				$result = Get-DockerContainers
+			}
+			It 'Contains foo property' {
+				$result.foo | Should -Be 'bar'
+			}
+			It 'Contains bar property' {
+				$result.bar | Should -Be 'baz'
+			}
+		}
 	}
 
-	Context 'Get-DockerImages returns an object' {
-		BeforeAll {
-			Mock docker { '{"foo": "bar", "bar": "baz"}' }
-			$result = Get-DockerContainers
-		}
-		It 'Contains foo property' {
-			$result.foo | Should -Be 'bar'
-		}
-		It 'Contains bar property' {
-			$result.bar | Should -Be 'baz'
-		}
-	}
 }
