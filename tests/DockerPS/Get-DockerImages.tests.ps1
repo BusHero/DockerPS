@@ -4,13 +4,13 @@ BeforeAll {
 
 Describe 'Get-DockerImages' {
 	BeforeAll {
-		Mock docker {  }
+		Mock docker { '"{"foo": "bar", "bar": "baz"}"' }
 	}
-	
+
 	It 'No parameters' {
 		Get-DockerImages
 		Should -Invoke -CommandName 'docker' -Exactly -Times 1 -ParameterFilter {
-			"${args}" -eq "images --format '{{json .}}'"
+			$args -is [array] -and "$($args[0])" -eq "images --format '{{json .}}'"
 		}
 	}
 
@@ -18,23 +18,23 @@ Describe 'Get-DockerImages' {
 		$imageName = 'foo'
 		Get-DockerImages -Image $imageName
 		Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
-			"${args}" -eq "images --format '{{json .}}' ${imageName}" 
+			$args -is [array] -and "$($args[0])" -eq "images --format '{{json .}}' ${imageName}"
 		}
 	}
 
 	It '--no-trunc' {
 		Get-DockerImages -NoTrunc
 		Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
-			"${args}" -eq "images --format '{{json .}}' --no-trunc"
+			$args -is [array] -and "$($args[0])" -eq "images --format '{{json .}}' --no-trunc"
 		}
 	}
 
 	Describe '--filter' {
 		It 'one filter' {
 			$filter = 'foo=bar'
-			Get-DockerImages -Filter $filter 
+			Get-DockerImages -Filter $filter
 			Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
-				"${args}" -eq "images --format '{{json .}}' --filter '${filter}'"
+				$args -is [array] -and "$($args[0])" -eq "images --format '{{json .}}' --filter '${filter}'"
 			}
 		}
 
@@ -43,7 +43,7 @@ Describe 'Get-DockerImages' {
 			$filter2 = 'bar=baz'
 			Get-DockerImages -Filter $filter1, $filter2
 			Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
-				"${args}" -eq "images --format '{{json .}}' --filter '${filter1}' --filter '${filter2}'"
+				$args -is [array] -and "$($args[0])" -eq "images --format '{{json .}}' --filter '${filter1}' --filter '${filter2}'"
 			}
 		}
 
@@ -52,16 +52,16 @@ Describe 'Get-DockerImages' {
 				$filter = ''
 				Get-DockerImages -Filter $filter
 				Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
-					"${args}" -eq "images --format '{{json .}}'"
+					$args -is [array] -and "$($args[0])" -eq "images --format '{{json .}}'"
 				}
 			}
-			
+
 			It 'Two filters' {
 				$filter1 = 'foo=bar'
 				$filter2 = ''
 				Get-DockerImages -Filter $filter1, $filter2
 				Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
-					"${args}" -eq "images --format '{{json .}}' --filter '${filter1}'"
+					$args -is [array] -and "$($args[0])" -eq "images --format '{{json .}}' --filter '${filter1}'"
 				}
 			}
 		}
@@ -73,7 +73,7 @@ Describe 'Get-DockerImages' {
 				}
 				Get-DockerImages -Filter $filter
 				Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
-					"${args}" -eq "images --format '{{json .}}' --filter 'foo=$($filter.foo)'"
+					$args -is [array] -and "$($args[0])" -eq "images --format '{{json .}}' --filter 'foo=$($filter.foo)'"
 				}
 			}
 
@@ -84,8 +84,8 @@ Describe 'Get-DockerImages' {
 				}
 				Get-DockerImages -Filter $filter
 				Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
-					switch ("${args}") {
-						"images --format '{{json .}}' --filter 'foo=$($filter.foo)' --filter 'bar=$($filter.bar)'" { 
+					switch ("$($args[0])") {
+						"images --format '{{json .}}' --filter 'foo=$($filter.foo)' --filter 'bar=$($filter.bar)'" {
 							return $true
 						}
 						"images --format '{{json .}}' --filter 'bar=$($filter.bar)' --filter 'foo=$($filter.foo)'" {
@@ -105,22 +105,21 @@ Describe 'Get-DockerImages' {
 				}
 				Get-DockerImages -Filter $filter
 				Should -Invoke -CommandName 'docker' -Times 1 -ParameterFilter {
-					"${args}" -eq "images --format '{{json .}}' --filter 'foo=$($filter.foo)' --filter 'bar=$($filter.bar)'"
+					$args -is [array] -and "$($args[0])" -eq "images --format '{{json .}}' --filter 'foo=$($filter.foo)' --filter 'bar=$($filter.bar)'"
 				}
+			}
+		}
+		Describe 'Get-DockerImages returns an object' {
+			BeforeAll {
+				$result = Get-DockerImages
+			}
+			It 'Contains foo property' {
+				$result.foo | Should -Be 'bar'
+			}
+			It 'Contains bar property' {
+				$result.bar | Should -Be 'baz'
 			}
 		}
 	}
 
-	Describe 'Get-DockerImages returns an object' {
-		BeforeAll {
-			Mock docker { '{"foo": "bar", "bar": "baz"}' }
-			$result = Get-DockerImages
-		}
-		It 'Contains foo property' {
-			$result.foo | Should -Be 'bar'
-		}
-		It 'Contains bar property' {
-			$result.bar | Should -Be 'baz'
-		}
-	}
 }

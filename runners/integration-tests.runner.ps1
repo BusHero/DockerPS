@@ -1,7 +1,7 @@
 Import-Module Pester
 
 $ProjectRoot = "${PSScriptRoot}\.."
-$path = "${ProjectRoot}\tests\DockerPS\"
+$path = "${ProjectRoot}\tests\integration\"
 $date = Get-Date -Format 'yyyy_MM_dd_HH_mm_ss'
 
 [PesterConfiguration] $configuration = New-PesterConfiguration
@@ -10,11 +10,6 @@ $configuration.Run.Path = $path
 $configuration.Run.Exit = $true
 $configuration.TestResult.Enabled = $true
 $configuration.TestResult.OutputPath = `
-	"${ProjectRoot}\test-results\unit-tests.${date}.xml"
-
-# Code Coverage
-$configuration.CodeCoverage.Enabled = $true
-$configuration.CodeCoverage.Path = "${ProjectRoot}\src\DockerPS\"
-$configuration.CodeCoverage.OutputPath = "${ProjectRoot}\test-results\coverage.${date}.xml"
+	"${ProjectRoot}\test-results\integration-tests.${date}.xml"
 
 Invoke-Pester -Configuration $configuration

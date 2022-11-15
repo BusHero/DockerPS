@@ -31,6 +31,10 @@ partial class Build : NukeBuild
 		.Executes(() => PowerShellCore(_ => _
 			.SetFile(RunnersPath / "unit-tests.runner.ps1")));
 
+	private Target RunIntegrationTests => _ => _
+		.Executes(() => PowerShellCore(_ => _
+			.SetFile(RunnersPath / "integration-tests.runner.ps1")));
+
 	private Target InvokePSAnalyzer => _ => _
 		.Executes(() => PowerShellCore(_ => _
 			.SetFile(RunnersPath / "script-analyzer.runner.ps1")));
