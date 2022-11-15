@@ -81,5 +81,8 @@ function Get-DockerContainers {
 			-NoTrunc:$NoTrunc `
 			-Filter $Filter)
 	$result = [array](docker $arguments)
+	if ($result -eq $null) {
+		return
+	}
 	return $result | ForEach-Object { $_.Substring(1, $_.Length - 2) } | ConvertFrom-Json
 }
