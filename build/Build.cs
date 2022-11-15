@@ -27,7 +27,6 @@ partial class Build : NukeBuild
 		});
 
 	private Target RunUnitTests => _ => _
-		.OnlyWhenStatic(() => )
 		.Executes(() => PowerShellCore(_ => _
 			.SetFile(RunnersPath / "unit-tests.runner.ps1")));
 
