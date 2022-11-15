@@ -1,6 +1,6 @@
 Describe 'Get Docker-Images' {
 	BeforeAll {
-		Import-Module -Name "${PSScriptRoot}\..\..\src\DockerPS"
+		Import-Module -Name "${PSScriptRoot}\..\src\DockerPS"
 	}
 
 	Describe 'Get-DockerImages' {

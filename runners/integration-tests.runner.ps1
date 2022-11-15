@@ -1,7 +1,7 @@
 Import-Module Pester
 
 $ProjectRoot = "${PSScriptRoot}\.."
-$path = "${ProjectRoot}\tests\integration\"
+$path = "${ProjectRoot}\tests\integration.tests.ps1"
 $date = Get-Date -Format 'yyyy_MM_dd_HH_mm_ss'
 
 [PesterConfiguration] $configuration = New-PesterConfiguration
