@@ -20,17 +20,23 @@ Describe 'Get Docker-Images' {
 	}
 
 	Describe 'Get-DockerContainers' {
-		BeforeAll {
-			$containerName = "container_$(New-Guid)"
-			docker run --name $containerName -it -d --rm alpine
+		Describe 'Containers' {
+			BeforeAll {
+				$containerName = "container_$(New-Guid)"
+				docker run --name $containerName -it -d --rm alpine
+			}
+			It 'Get-DockerContainers' {
+				Get-DockerContainers |
+				Select-Object -ExpandProperty Names |
+				Should -Contain $containerName
+			}
+			AfterAll {
+				docker stop $containerName
+			}
 		}
-		It 'Get-DockerContainers' {
-			Get-DockerContainers |
-			Select-Object -ExpandProperty Names |
-			Should -Contain $containerName
-		}
-		AfterAll {
-			docker stop $containerName
+
+		It 'No containers' {
+			Get-DockerContainers | Should -BeNullOrEmpty
 		}
 	}
 
