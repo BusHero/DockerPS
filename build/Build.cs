@@ -57,12 +57,25 @@ partial class Build : NukeBuild
 
 	private Target RunIntegrationTests => _ => _
 	 	.OnlyWhenStatic(() => IsLocalBuild)
-		.Executes(() => PowerShellCore(_ => _
-			.SetFile(RunnersPath / "integration-tests.runner.ps1")));
+		.Executes(() =>
+		{
+			var currentLogger = Log.Logger;
+			Log.Logger = this.SimpleLogger;
+			PowerShellCore(_ => _
+						.SetFile(RunnersPath / "integration-tests.runner.ps1"));
+			Log.Logger = currentLogger;
+		});
 
 	private Target InvokePSAnalyzer => _ => _
-		.Executes(() => PowerShellCore(_ => _
-			.SetFile(RunnersPath / "script-analyzer.runner.ps1")));
+		.Executes(() =>
+		{
+			var currentLogger = Log.Logger;
+			Log.Logger = this.SimpleLogger;
+			PowerShellCore(_ => _
+						.SetFile(RunnersPath / "script-analyzer.runner.ps1"));
+			Log.Logger = currentLogger;
+
+		});
 
 	[GitVersion]
 	readonly GitVersion GitVersion;

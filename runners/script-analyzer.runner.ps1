@@ -24,6 +24,7 @@ foreach ($file in $files) {
 	$configuration.TestResult.Enabled = $true
 	$configuration.TestResult.OutputPath = `
 		"${ProjectRoot}\test-results\analyzer.${file}.${date}.xml"
+	$configuration.Output.CIFormat = 'GitHubActions'
 
 	Invoke-Pester -Configuration $configuration
 }
