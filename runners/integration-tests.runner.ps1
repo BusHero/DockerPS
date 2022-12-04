@@ -11,5 +11,6 @@ $configuration.Run.Exit = $true
 $configuration.TestResult.Enabled = $true
 $configuration.TestResult.OutputPath = `
 	"${ProjectRoot}\test-results\integration-tests.${date}.xml"
+$configuration.Output.CIFormat = 'GitHubActions'
 
 Invoke-Pester -Configuration $configuration

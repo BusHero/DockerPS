@@ -4,6 +4,8 @@ using Nuke.Common.Tools.PowerShell;
 using static PowerShellCoreTasks;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Git;
+using Serilog;
+using Nuke.Common.Execution;
 
 partial class Build : NukeBuild
 {
@@ -19,25 +21,61 @@ partial class Build : NukeBuild
 	 	.DependentFor(GenerateModuleManifest, RunUnitTests, InvokePSAnalyzer)
 		.Executes(() =>
 		{
+			var currentLogger = Log.Logger;
+			Log.Logger = this.SimpleLogger;
 			PowerShellCore(_ => _
 				.SetFile(RunnersPath / "Install-Dependencies.ps1"));
 
 			PowerShellCore(_ => _
 						.SetFile(RunnersPath / "dependencies.runner.ps1"));
+
+			Log.Logger = currentLogger;
 		});
 
+	private ILogger _logger;
+	private ILogger SimpleLogger => _logger ??= new LoggerConfiguration()
+		.WriteTo.Console(
+			outputTemplate: "{Message:l}{NewLine}{Exception}",
+			applyThemeToRedirectedOutput: true)
+		.ConfigureInMemory(this)
+		.ConfigureFiles(this)
+		.ConfigureLevel()
+		.ConfigureFilter()
+		.CreateLogger();
+
 	private Target RunUnitTests => _ => _
-		.Executes(() => PowerShellCore(_ => _
-			.SetFile(RunnersPath / "unit-tests.runner.ps1")));
+		.Executes(() =>
+		{
+			var currentLogger = Log.Logger;
+			Log.Logger = this.SimpleLogger;
+
+			PowerShellCore(_ => _
+				.SetFile(RunnersPath / "unit-tests.runner.ps1"));
+
+			Log.Logger = currentLogger;
+		});
 
 	private Target RunIntegrationTests => _ => _
 	 	.OnlyWhenStatic(() => IsLocalBuild)
-		.Executes(() => PowerShellCore(_ => _
-			.SetFile(RunnersPath / "integration-tests.runner.ps1")));
+		.Executes(() =>
+		{
+			var currentLogger = Log.Logger;
+			Log.Logger = this.SimpleLogger;
+			PowerShellCore(_ => _
+						.SetFile(RunnersPath / "integration-tests.runner.ps1"));
+			Log.Logger = currentLogger;
+		});
 
 	private Target InvokePSAnalyzer => _ => _
-		.Executes(() => PowerShellCore(_ => _
-			.SetFile(RunnersPath / "script-analyzer.runner.ps1")));
+		.Executes(() =>
+		{
+			var currentLogger = Log.Logger;
+			Log.Logger = this.SimpleLogger;
+			PowerShellCore(_ => _
+						.SetFile(RunnersPath / "script-analyzer.runner.ps1"));
+			Log.Logger = currentLogger;
+
+		});
 
 	[GitVersion]
 	readonly GitVersion GitVersion;

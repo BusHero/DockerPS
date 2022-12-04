@@ -9,5 +9,6 @@ $configuration.Run.Exit = $true
 $configuration.TestResult.Enabled = $true
 $configuration.TestResult.OutputPath = `
 	"${ProjectRoot}\test-results\test-modulemanifest.Tests.$(Get-Date -Format 'yyyy_MM_dd_HH_mm_ss').xml"
+$configuration.Output.CIFormat = 'GitHubActions'
 
 Invoke-Pester -Configuration $configuration
