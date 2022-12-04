@@ -11,6 +11,8 @@ $configuration.Run.Exit = $true
 $configuration.TestResult.Enabled = $true
 $configuration.TestResult.OutputPath = `
 	"${ProjectRoot}\test-results\unit-tests.${date}.xml"
+$configuration.TestResult.OutputFormat
+$configuration.Output.CIFormat = 'GitHubActions'
 
 # Code Coverage
 $configuration.CodeCoverage.Enabled = $true
